@@ -1,0 +1,14 @@
+spyder-kernels
+confluent-kafka
+aiokafka
+requests
+pyarrow
+pandas
+numpy
+pipreqs
+avro-python3
+python-schema-registry-client
+fake-useragent
+beautifulsoup4
+black
+diagrams
