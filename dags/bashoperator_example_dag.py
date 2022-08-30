@@ -1,6 +1,6 @@
 import pendulum
 from airflow.decorators import dag
-from airflow.operators.bash_operator import BashOperator
+from airflow.operators.bash import BashOperator
 from datetime import timedelta
 
 
