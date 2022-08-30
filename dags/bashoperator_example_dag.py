@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pendulum
 from airflow.decorators import dag
 from airflow.operators.bash import BashOperator

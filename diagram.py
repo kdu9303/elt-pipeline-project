@@ -13,11 +13,7 @@ with Diagram("ELT Pipeline", show=True):
     scheduler << Edge(color="blue", style="dashed") << producer
 
     with Cluster("Kafka Cluster"):
-        broker = [
-            Kafka("broker1"),
-            Kafka("broker2"),
-            Kafka("broker3")
-            ]
+        broker = [Kafka("broker1"), Kafka("broker2"), Kafka("broker3")]
 
     sink_connector = Kafka("S3 sink connector")
     datalake = S3("S3 Datalake")
