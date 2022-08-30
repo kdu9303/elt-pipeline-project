@@ -11,4 +11,3 @@ python-schema-registry-client
 fake-useragent
 beautifulsoup4
 black
-diagrams
