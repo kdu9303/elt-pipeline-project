@@ -19,20 +19,20 @@ default_args = {
     start_date=pendulum.datetime(2021, 1, 1, tz="Asia/Seoul"),
     tags=["test dag"],
 )
-def print_python_version():
+def mwaa_environment_check():
     """
     ### Dag Documentation
-    python version을 프린트하는 test dag 입니다.
-    dag 업데이트용으로 작성합니다22.
+    mwaa 인스턴스의 각종 환경 설정을 확인하기 위한 dag입니다.
     """
-    execute_cmd1 = BashOperator(
-        task_id="shell_execute1", bash_command="python3 --version"
+    check_python_version = BashOperator(
+        task_id="check_python_version", bash_command="python3 --version"
     )
 
-    execute_cmd2 = BashOperator(
-        task_id="shell_execute2", bash_command="pip list"
+    check_pip_list = BashOperator(
+        task_id="check_pip_list", bash_command="pip list"
     )
-    execute_cmd1 >> execute_cmd2
+    check_python_version
+    check_pip_list
 
 
-dag = print_python_version()
+dag = mwaa_environment_check()
