@@ -26,7 +26,7 @@ jobs:
     - name: Lint with Flake8
       run: |
         pip install flake8
-        flake8 --ignore E501 dags --benchmark -v
+        flake8 --ignore E501,F841 dags --benchmark -v
     - name: Confirm Black code compliance
       run: |
         pip install black

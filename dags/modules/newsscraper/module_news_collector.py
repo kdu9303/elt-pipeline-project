@@ -2,10 +2,13 @@
 import time
 import pytz
 import urllib
+import logging
 import requests
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
+
+logger = logging.getLogger()
 
 
 class NaverNewsScraper:
@@ -179,7 +182,8 @@ class NaverNewsScraper:
                             # print("현재 페이지의 기사 갯수: " + str(news_count_per_page))
 
             except Exception as e:
-                print(e)
+                logger.exception(f"{self.search.__name__} --> {e}")
+                raise
 
             time.sleep(0.5)
         return (
@@ -270,3 +274,4 @@ if __name__ == "__main__":
         news = scraper.run(start_date, end_date)
         for article in news:
             print(article)
+            logger.info(article)
