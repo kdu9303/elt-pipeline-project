@@ -201,8 +201,8 @@ class NaverNewsScraper:
         publisher_list: List[str],
         news_title_list: List[str],
         news_url_list: List[str],
-        news_description_list,
-    ) -> Dict[list]:
+        news_description_list: List[str],
+    ) -> Dict[str, str]:
 
         """kafka message형태로 전환"""
 
