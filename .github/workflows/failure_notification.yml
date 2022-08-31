@@ -1,0 +1,25 @@
+name: Sync DAGs
+
+on:
+  workflow_run:
+    workflows:
+      - 'Test DAGs'
+    types:
+      - completed
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'success' }}
+    steps:
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,author,job
+          if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
