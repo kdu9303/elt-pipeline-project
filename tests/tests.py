@@ -6,7 +6,10 @@ import pytest
 from airflow.models import DagBag
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../dags"))
-# sys.path.append(os.path.join(os.path.dirname(__file__), "../dags/utilities"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../dags/modules"))
+sys.path.append(
+    os.path.join(os.path.dirname(__file__), "../dags/modules/newsscraper")
+)
 
 # Airflow variables called from DAGs under test are stubbed out
 # os.environ["AIRFLOW_DATA_LAKE_BUCKET"] = ""
@@ -18,7 +21,7 @@ def dag_bag(request):
 
 
 def test_no_import_errors(dag_bag):
-    assert not dag_bag.import_errors
+    assert not dag_bag.import_errors, "No Import Failures"
 
 
 def test_three_or_less_retries(dag_bag):

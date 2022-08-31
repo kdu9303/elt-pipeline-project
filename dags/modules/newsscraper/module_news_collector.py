@@ -274,5 +274,4 @@ if __name__ == "__main__":
         # result.append(scraper.run(start_date, end_date))
         news = scraper.run(start_date, end_date)
         for article in news:
-            print(article)
             logger.info(article)
