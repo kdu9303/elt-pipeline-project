@@ -29,8 +29,8 @@ jobs:
         flake8 --ignore E501 dags --benchmark -v
     - name: Confirm Black code compliance
       run: |
-        pip install pytest-black
-        pytest dags --black -v
+        pip install black
+        black dags
     - name: Test with Pytest
       run: |
         pip install pytest
