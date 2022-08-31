@@ -25,7 +25,7 @@ def print_python_version():
     python version을 프린트하는 test dag 입니다.
     """
     execute_cmd = BashOperator(
-        task_id="shell_execute", bash_command="echo python --version"
+        task_id="shell_execute", bash_command="python --version"
     )
 
     execute_cmd
