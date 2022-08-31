@@ -4,6 +4,7 @@ import pytz
 import urllib
 import logging
 import requests
+from typing import List
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -34,10 +35,10 @@ class NaverNewsScraper:
 
     def get_date_range(
         self, start_date: datetime, end_date: datetime
-    ) -> list[str]:
+    ) -> List[str]:
 
         # 날짜 제너레이터 생성
-        def daterange(start_date: datetime, end_date: datetime) -> list[str]:
+        def daterange(start_date: datetime, end_date: datetime) -> List[str]:
 
             for n in range(int((end_date - start_date).days) + 1):
                 yield start_date + timedelta(n)
@@ -64,7 +65,7 @@ class NaverNewsScraper:
     def get_selector_value(self, html_parser, css_selector):
         return html_parser.select(css_selector)
 
-    def search(self, start_date: datetime, end_date: datetime) -> list[list]:
+    def search(self, start_date: datetime, end_date: datetime) -> List[list]:
 
         print(f"검색어: {self.keyword}")
         keyword = self.parse_keyword()
@@ -197,9 +198,9 @@ class NaverNewsScraper:
     def news_data_wrangler(
         self,
         publish_date: str,
-        publisher_list: list[str],
-        news_title_list: list[str],
-        news_url_list: list[str],
+        publisher_list: List[str],
+        news_title_list: List[str],
+        news_url_list: List[str],
         news_description_list,
     ) -> dict[list]:
 
