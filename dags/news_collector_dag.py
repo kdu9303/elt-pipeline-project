@@ -37,14 +37,14 @@ def scrape_news_data():
         start_date = current_date - timedelta(days=2)
         end_date = current_date - timedelta(days=1)
 
-        scraper = NaverNewsScraper(keyword)
-        news = scraper.run(start_date, end_date)
+        for keyword in keywords:
+            scraper = NaverNewsScraper(keyword)
+            # result.append(scraper.run(start_date, end_date))
+            news = scraper.run(start_date, end_date)
+            for article in news:
+                logger.info(article)
 
-        for article in news:
-            logger.info(article)
-
-    print_news = print_data.expand(keywords)
-    print_news
+    print_data(keywords)
 
 
 dag = scrape_news_data()
