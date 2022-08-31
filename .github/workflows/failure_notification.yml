@@ -1,4 +1,4 @@
-name: Sync DAGs
+name: Failure Alert
 
 on:
   workflow_run:
