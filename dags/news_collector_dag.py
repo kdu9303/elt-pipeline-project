@@ -44,3 +44,6 @@ def scrape_news_data():
             logger.info(article)
 
     print_news = print_data.expand(keywords)
+
+
+dag = scrape_news_data()
