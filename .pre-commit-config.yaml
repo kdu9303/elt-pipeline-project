@@ -19,6 +19,7 @@ repos:
     rev: 5.0.4
     hooks:
     -  id: flake8
+       args: ["--ignore=E501,P103"]
        additional_dependencies:
        - flake8-comprehensions
        - flake8-simplify

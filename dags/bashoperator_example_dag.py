@@ -25,10 +25,15 @@ def print_python_version():
     python version을 프린트하는 test dag 입니다.
     dag 업데이트용으로 작성합니다.
     """
-    execute_cmd = BashOperator(
-        task_id="shell_execute", bash_command="python3 --version"
+    execute_cmd1 = BashOperator(
+        task_id="shell_execute1", bash_command="python3 --version"
     )
-    execute_cmd
+
+    execute_cmd2 = BashOperator(
+        task_id="shell_execute2", bash_command="pip list"
+    )
+
+    execute_cmd1 >> execute_cmd2
 
 
 dag = print_python_version()
