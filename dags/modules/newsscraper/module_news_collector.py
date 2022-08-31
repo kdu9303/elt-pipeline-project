@@ -4,7 +4,7 @@ import pytz
 import urllib
 import logging
 import requests
-from typing import List
+from typing import List, Dict
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -202,7 +202,7 @@ class NaverNewsScraper:
         news_title_list: List[str],
         news_url_list: List[str],
         news_description_list,
-    ) -> dict[list]:
+    ) -> Dict[list]:
 
         """kafka message형태로 전환"""
 
