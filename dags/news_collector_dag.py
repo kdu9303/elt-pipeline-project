@@ -31,7 +31,7 @@ def scrape_news_data():
     keywords = ["인천세종병원", "심장내과", "흉부외과", "환자경험평가"]
 
     @task
-    def print_data(keyword: str):
+    def print_data(keywords: str):
 
         current_date = datetime.now(pytz.timezone("Asia/Seoul"))
         start_date = current_date - timedelta(days=2)
