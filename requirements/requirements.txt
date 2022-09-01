@@ -3,6 +3,7 @@ airflow-provider-kafka
 spyder-kernels
 confluent-kafka
 aiokafka
+uuid
 requests
 pyarrow
 pandas

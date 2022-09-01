@@ -1,0 +1,88 @@
+version: '3.8'
+services:
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop
+    restart: always
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKER_CONNECT: "kafka1:19091"
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+  schema-registry:
+    image: confluentinc/cp-schema-registry:6.1.1
+    container_name: schema-registry
+    restart: always
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+    ports:
+      - 8081:8081
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka1:19091,kafka2:19092,kafka3:19093"
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect-base:6.1.0
+    container_name: kafka-connect
+    restart: always
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+      - schema-registry
+    ports:
+      - 8083:8083
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "kafka1:19091,kafka2:19092,kafka3:19093"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: kafka-connect
+      CONNECT_CONFIG_STORAGE_TOPIC: _kafka-connect-configs
+      CONNECT_OFFSET_STORAGE_TOPIC: _kafka-connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: _kafka-connect-status
+      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+      CONNECT_KAFKA_HEAP_OPTS: "-Xms256M -Xmx2G"
+      CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
+      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_PLUGIN_PATH: '/usr/share/java,/usr/share/confluent-hub-components/,/connectors/'
+      # If you want to use the Confluent Hub installer to d/l component, but make them available
+      # when running this offline, spin up the stack once and then run :
+      #   docker cp kafka-connect:/usr/share/confluent-hub-components ./connectors
+      #   mv ./connectors/confluent-hub-components/* ./connectors
+      #   rm -rf ./connectors/confluent-hub-components
+    volumes:
+      - ./connectors:/connectors
+    # connector 플러그인, RDB driver 설치 필요
+    command:
+      - bash
+      - -c
+      - |
+        echo "Installing connector plugins"
+        confluent-hub install --no-prompt mdrogalis/voluble:0.3.1
+        confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:5.5.3
+        confluent-hub install --no-prompt confluentinc/kafka-connect-s3:10.1.1
+        # confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.7.0
+        # Sticking to 5.5.3 at the moment because of issue with 10.0.1 https://rmoff.net/2021/03/11/kafka-connect-sqlsyntaxerrorexception-blob/text-column-used-in-key-specification-without-a-key-length/
+        #
+        echo "Downloading JDBC driver"
+        cd /usr/share/confluent-hub-components/confluentinc-kafka-connect-jdbc
+        # plugins 폴더에 jdbc driver를 다운받는다(DB버전 확인 필수)
+        wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.27/mysql-connector-java-8.0.27.jar
+        wget https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc8/21.5.0.0/ojdbc8-21.5.0.0.jar
+        # curl https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.29.tar.gz | tar xz
+        #
+        echo "Launching Kafka Connect worker"
+        /etc/confluent/docker/run &
+        #
+        sleep infinity
