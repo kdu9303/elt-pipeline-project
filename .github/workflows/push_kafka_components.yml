@@ -1,0 +1,26 @@
+name: Push Kafka Components
+
+on:
+  push:
+    paths:
+      - 'kafka-component/**'
+  pull_request:
+    branches:
+      - main
+jobs:
+  deploy:
+    name: Push to kafka-components EC2 Instance
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2 instance
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.KAFKA_COMPONENT_PRIVATE_SSH_PRIVATE_KEY }}
+          SOURCE: "kafka-component/"
+          REMOTE_HOST: "ec2-3-36-46-251.ap-northeast-2.compute.amazonaws.com"
+          REMOTE_USER: "ec2-user"
+          TARGET: "/home/ec2-user/data"
