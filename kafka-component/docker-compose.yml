@@ -1,16 +1,16 @@
 version: '3.8'
 services:
-  kafdrop:
-    image: obsidiandynamics/kafdrop
-    container_name: kafdrop
-    restart: always
-    ports:
-      - "9000:9000"
-    environment:
-      KAFKA_BROKER_CONNECT: |-
-        kafka1:19091,
-        kafka2:19092,
-        kafka3:19093
+  # kafdrop:
+  #   image: obsidiandynamics/kafdrop
+  #   container_name: kafdrop
+  #   restart: always
+  #   ports:
+  #     - "9000:9000"
+  #   environment:
+  #     KAFKA_BROKER_CONNECT: |-
+  #       kafka1:19091,
+  #       kafka2:19092,
+  #       kafka3:19093
   schema-registry:
     image: confluentinc/cp-schema-registry:6.1.1
     container_name: schema-registry

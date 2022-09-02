@@ -28,10 +28,20 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_LOG_RETENTION_HOURS: 24
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
-      KAFKA_LOG_RETENTION_BYTES: 10737418240
+      KAFKA_LOG_RETENTION_BYTES: 5368709120
       KAFKA_LOG_SEGMENT_DELETE_DELAY_MS: 60000
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
+      #JMX
+      KAFKA_JMX_HOSTNAME: kafka1
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_OPTS: |
+        "-Djava.rmi.server.hostname=kafka1
+        -Dcom.sun.management.jmxremote.local.only=false
+        -Dcom.sun.management.jmxremote.rmi.port=9999
+        -Dcom.sun.management.jmxremote.port=9999
+        -Dcom.sun.management.jmxremote.authenticate=false
+        -Dcom.sun.management.jmxremote.ssl=false"
     volumes:
       - ./data/kafka1/data:/tmp/kafka-logs
     depends_on:
@@ -51,10 +61,20 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_LOG_RETENTION_HOURS: 24
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
-      KAFKA_LOG_RETENTION_BYTES: 10737418240
+      KAFKA_LOG_RETENTION_BYTES: 5368709120
       KAFKA_LOG_SEGMENT_DELETE_DELAY_MS: 60000
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
+      #JMX
+      KAFKA_JMX_HOSTNAME: kafka2
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_OPTS: |
+        "-Djava.rmi.server.hostname=kafka2
+        -Dcom.sun.management.jmxremote.local.only=false
+        -Dcom.sun.management.jmxremote.rmi.port=9999
+        -Dcom.sun.management.jmxremote.port=9999
+        -Dcom.sun.management.jmxremote.authenticate=false
+        -Dcom.sun.management.jmxremote.ssl=false"
     volumes:
       - ./data/kafka2/data:/tmp/kafka-logs
     depends_on:
@@ -74,11 +94,33 @@ services:
       KAFKA_BROKER_ID: 3
       KAFKA_LOG_RETENTION_HOURS: 24
       KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 300000
-      KAFKA_LOG_RETENTION_BYTES: 10737418240
+      KAFKA_LOG_RETENTION_BYTES: 5368709120
       KAFKA_LOG_SEGMENT_DELETE_DELAY_MS: 60000
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
+      #JMX
+      KAFKA_JMX_HOSTNAME: kafka3
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_OPTS: |
+        "-Djava.rmi.server.hostname=kafka3
+        -Dcom.sun.management.jmxremote.local.only=false
+        -Dcom.sun.management.jmxremote.rmi.port=9999
+        -Dcom.sun.management.jmxremote.port=9999
+        -Dcom.sun.management.jmxremote.authenticate=false
+        -Dcom.sun.management.jmxremote.ssl=false"
     volumes:
       - ./data/kafka3/data:/tmp/kafka-logs
     depends_on:
       - zookeeper
+  kafka_manager_cmak:
+    image: hlebalbau/kafka-manager:stable
+    ports:
+      - "9000:9000"
+    depends_on:
+      - zookeeper
+      - kafka1
+      - kafka2
+      - kafka3
+    environment:
+      ZK_HOSTS: "zookeeper:2181"
+      APPLICATION_SECRET: "random-secret"
