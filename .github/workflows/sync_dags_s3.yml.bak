@@ -1,4 +1,4 @@
-name: Sync DAGs
+name: Sync DAGs on s3 bucket
 
 on:
   workflow_run:

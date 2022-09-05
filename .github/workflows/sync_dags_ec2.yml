@@ -1,0 +1,29 @@
+name: Sync DAGs on ec2
+
+on:
+  workflow_run:
+    workflows:
+      - 'Test DAGs'
+    types:
+      - completed
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  deploy:
+    name: Push to airflow EC2 Instance
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: sync dags to EC2 instance
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.KAFKA_SIDE_CAR_PRIVATE_SSH_PRIVATE_KEY }}
+          SOURCE: "dags/"
+          REMOTE_HOST: ${{ secrets.AIRFLOW_EC2_REMOTE_HOST }}
+          REMOTE_USER: "ec2-user"
+          TARGET: "/home/ec2-user/airflow/dags"
