@@ -1,3 +1,5 @@
+# MODIFYED BY KDU9303
+
 # AIRFLOW_IMAGE_NAME           - Docker image name used to run Airflow.
 #                                Default: apache/airflow:2.2.2
 # AIRFLOW_UID                  - User ID in Airflow containers

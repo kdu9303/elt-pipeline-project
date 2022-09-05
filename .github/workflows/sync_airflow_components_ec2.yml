@@ -2,7 +2,7 @@ name: Sync Airflow Components to ec2
 on:
   push:
     paths:
-      - 'airflow-dev-env/'
+      - 'airflow-dev-env/**'
 
 jobs:
   deploy:
