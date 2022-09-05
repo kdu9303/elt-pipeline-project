@@ -30,8 +30,8 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
-    AIRFLOW__CORE__PARALLELISM: '32'
-    AIRFLOW__CELERY__WORKER_CONCURRENCY: 32
+    AIRFLOW__CORE__PARALLELISM: 16
+    AIRFLOW__CELERY__WORKER_CONCURRENCY: 16
     # modified
     # _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-slack apache-airflow-providers-google apache-airflow-providers-oracle}
   volumes:
