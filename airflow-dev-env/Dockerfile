@@ -1,3 +1,4 @@
+# MWAA airflow버전
 FROM apache/airflow:2.2.2-python3.7
 USER root
 RUN apt-get update \
@@ -28,4 +29,5 @@ USER airflow
 COPY requirements.txt /requirements.txt
 
 RUN /usr/local/bin/python -m pip install --upgrade pip \
+  && pip install apache-airflow-providers-amazon \
   && pip install --no-cache-dir --user -r /requirements.txt
