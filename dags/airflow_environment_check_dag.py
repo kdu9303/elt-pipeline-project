@@ -19,7 +19,7 @@ default_args = {
     start_date=pendulum.datetime(2021, 1, 1, tz="Asia/Seoul"),
     tags=["test dag"],
 )
-def mwaa_environment_check():
+def airflow_environment_check():
     """
     ### Dag Documentation
     mwaa 인스턴스의 각종 환경 설정을 확인하기 위한 dag입니다.
@@ -32,4 +32,4 @@ def mwaa_environment_check():
     check_python_environment
 
 
-dag = mwaa_environment_check()
+dag = airflow_environment_check()
