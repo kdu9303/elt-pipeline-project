@@ -14,7 +14,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 
 # instanct client(오라클DB)
-# TNS_ADMIN 변수(instanct client 경로) 체크할 것.
+# TNS_ADMIN 변수(instanct client 경로) 체크할 것..
 # sqlnet.ora DIRECTORY 확인
 # docker 컨테이너 안에 sqlnet.ora 경로 변경 필수
 # COPY dependencies/instantclient_21_3 ./dependencies/instantclient_21_3
