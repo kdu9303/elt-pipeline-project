@@ -31,7 +31,7 @@ x-airflow-common:
     AIRFLOW__CORE__PARALLELISM: '32'
     AIRFLOW__CELERY__WORKER_CONCURRENCY: 32
     # modified
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-slack apache-airflow-providers-google apache-airflow-providers-oracle}
+    # _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-slack apache-airflow-providers-google apache-airflow-providers-oracle}
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
