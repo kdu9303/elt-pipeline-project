@@ -19,8 +19,8 @@ jobs:
       - name: Deploy to EC2 instance
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.KAFKA_COMPONENT_PRIVATE_SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.KAFKA_SIDE_CAR_PRIVATE_SSH_PRIVATE_KEY }}
           SOURCE: "kafka-component/"
           REMOTE_HOST: ${{ secrets.KAFKA_COMPONENTS_REMOTE_HOST }}
           REMOTE_USER: "ec2-user"
-          TARGET: "/home/ec2-user/data"
+          TARGET: "/home/ec2-user/kafka-components"
