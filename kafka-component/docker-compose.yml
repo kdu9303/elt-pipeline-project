@@ -1,16 +1,16 @@
 version: '3.8'
 services:
-  # kafdrop:
-  #   image: obsidiandynamics/kafdrop
-  #   container_name: kafdrop
-  #   restart: always
-  #   ports:
-  #     - "9000:9000"
-  #   environment:
-  #     KAFKA_BROKER_CONNECT: |-
-  #       kafka1:19091,
-  #       kafka2:19092,
-  #       kafka3:19093
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop
+    restart: always
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKER_CONNECT: |-
+        43.201.13.181:9092,
+        43.200.251.62:9092,
+        52.78.78.140:9092
   schema-registry:
     image: confluentinc/cp-schema-registry:6.1.1
     container_name: schema-registry
@@ -20,9 +20,9 @@ services:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: |-
-        kafka1:19091,
-        kafka2:19092,
-        kafka3:19093
+        43.201.13.181:9092,
+        43.200.251.62:9092,
+        52.78.78.140:9092
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
   kafka-connect:
     image: confluentinc/cp-kafka-connect-base:6.1.0
@@ -34,9 +34,9 @@ services:
       - 8083:8083
     environment:
       CONNECT_BOOTSTRAP_SERVERS: |-
-        kafka1:19091,
-        kafka2:19092,
-        kafka3:19093
+        43.201.13.181:9092,
+        43.200.251.62:9092,
+        52.78.78.140:9092
       CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: kafka-connect
@@ -50,7 +50,7 @@ services:
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
       CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
-      CONNECT_KAFKA_HEAP_OPTS: "-Xms256M -Xmx2G"
+      CONNECT_KAFKA_HEAP_OPTS: "-Xms256M -Xmx1G"
       CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
       CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
       CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
