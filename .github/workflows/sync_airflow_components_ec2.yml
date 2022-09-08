@@ -29,4 +29,15 @@ jobs:
           SOURCE: "airflow-dev-env/"
           REMOTE_HOST: ${{ secrets.AIRFLOW_EC2_REMOTE_HOST }}
           REMOTE_USER: "ec2-user"
-          TARGET: "/home/ec2-user/airflow/"
+          TARGET: "/home/ec2-user/airflow"
+      - name: Restart Docker-compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.KAFKA_COMPONENTS_REMOTE_HOST }}
+          username: "ec2-user"
+          key: ${{ secrets.KAFKA_SIDE_CAR_PRIVATE_SSH_PRIVATE_KEY }}
+          port: '22'
+          script: |
+            cd /home/ec2-user/airflow
+            docker-compose up -d
+            docker system prune -a

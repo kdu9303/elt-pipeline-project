@@ -43,3 +43,4 @@ jobs:
           script: |
             cd /home/ec2-user/kafka-components
             docker-compose up -d
+            docker system prune -a
