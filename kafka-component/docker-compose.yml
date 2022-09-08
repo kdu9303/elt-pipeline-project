@@ -40,7 +40,7 @@ services:
       CONNECT_CONFIG_STORAGE_TOPIC: _kafka-connect-configs
       CONNECT_OFFSET_STORAGE_TOPIC: _kafka-connect-offsets
       CONNECT_STATUS_STORAGE_TOPIC: _kafka-connect-status
-      # External secrets configs.
+      # External secrets configs. changed!
       CONNECT_CONFIG_PROVIDERS: 'file'
       CONNECT_CONFIG_PROVIDERS_FILE_CLASS: 'org.apache.kafka.common.config.provider.FileConfigProvider'
       CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
