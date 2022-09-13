@@ -21,8 +21,10 @@
         "storage.class": "io.confluent.connect.s3.storage.S3Storage",
         "format.class": "io.confluent.connect.s3.format.avro.AvroFormat",
         "partitioner.class": "io.confluent.connect.storage.partitioner.TimeBasedPartitioner",
-        "partition.duration.ms": "3600000",
+        "partition.duration.ms": "86400000",
         "path.format": "YYYY-MM-dd",
+        "timestamp.extractor": "RecordField",
+        "timestamp.field":"publish_date",
 
         "schema.generator.class": "io.confluent.connect.storage.hive.schema.DefaultSchemaGenerator",
         "schema.compatibility": "FULL",
