@@ -8,16 +8,12 @@
         "topics": "news-collecion-s3-sink",
         "topics.dir":"news_collection",
 
-        "aws.access.key.id": "${file:/config/connect-secrets.properties:AWS_ACCESS_KEY_ID}",
-        "aws.secret.access.key": "${file:/config/connect-secrets.properties:AWS_SECRET_ACCESS_KEY}",
-
         "s3.region": "ap-northeast-2",
         "s3.bucket.name": "etl-project-bucket-20220817",
         "s3.part.size": "5242880",
         "flush.size": "10",
         "file.delim":"_",
 
-        "s3.compression.type": "gzip",
         "storage.class": "io.confluent.connect.s3.storage.S3Storage",
         "format.class": "io.confluent.connect.s3.format.avro.AvroFormat",
         "partitioner.class": "io.confluent.connect.storage.partitioner.TimeBasedPartitioner",
