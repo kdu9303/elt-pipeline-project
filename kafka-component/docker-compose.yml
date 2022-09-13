@@ -65,7 +65,7 @@ services:
     volumes:
       - ./connectors:/connectors
       - ./config:/config
-      - $HOME/.aws/credentials:/root/.aws/credentials:ro
+      - $HOME/.aws/:/root/.aws:ro
     # connector 플러그인, RDB driver 설치 필요
     command:
       - bash
