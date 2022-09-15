@@ -66,6 +66,7 @@ def send_example():
     data = {"name": "abc2", "email": "abc2@example.com"}
 
     message_producer.produce(data)
+    logging.info("message sent successfully...")
 
 
 if __name__ == "__main__":
