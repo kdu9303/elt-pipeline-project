@@ -31,7 +31,7 @@ def test_producer():
     value_schema_path = "/avro_schema/test_schema_value.avsc"
 
     @task
-    def send_message(keywords: str):
+    def send_message():
 
         message_producer = MessageProducer(
             topic, key_schema_path, value_schema_path
