@@ -28,9 +28,11 @@ def test_producer():
     """
     topic = "test"
     key_schema_path = (
-        "/home/ec2-user/airflow/dags/modules/avro_schema/test_schema_key.avsc"
+        "/opt/airflow/dags/modules/avro_schema/test_schema_key.avsc"
     )
-    value_schema_path = "/home/ec2-user/airflow/dags/modules/avro_schema/test_schema_value.avsc"
+    value_schema_path = (
+        "/opt/airflow/dags/modules/avro_schema/test_schema_value.avsc"
+    )
 
     @task
     def send_message():
