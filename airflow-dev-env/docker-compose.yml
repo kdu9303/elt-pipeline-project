@@ -32,6 +32,7 @@ x-airflow-common:
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
     AIRFLOW__CORE__PARALLELISM: 16
     AIRFLOW__CELERY__WORKER_CONCURRENCY: 16
+    AIRFLOW__CORE__ENABLE_XCOM_PICKLING: 'true'
     # modified
     # _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-slack apache-airflow-providers-google apache-airflow-providers-oracle}
   volumes:

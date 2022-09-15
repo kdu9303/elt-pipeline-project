@@ -256,7 +256,7 @@ class NaverNewsScraper:
 
 if __name__ == "__main__":
 
-    keywords = ["인천세종병원", "심장내과", "흉부외과", "환자경험평가"]
+    keywords = ["인천세종병원", "심장내과", "흉부외과", "환자경험평가", "코로나19"]
 
     current_date = datetime.now(pytz.timezone("Asia/Seoul"))
     # 이틀전
@@ -274,4 +274,4 @@ if __name__ == "__main__":
         # result.append(scraper.run(start_date, end_date))
         news = scraper.run(start_date, end_date)
         for article in news:
-            logger.info(article)
+            print(article)
