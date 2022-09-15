@@ -2,7 +2,7 @@
 import pytz
 import logging
 import pendulum
-from typing import List, Dict
+from typing import List, Dict, TypedDict
 from datetime import datetime, timedelta
 from airflow.decorators import dag, task
 from modules.producer import MessageProducer
@@ -31,8 +31,21 @@ def scrape_news_data():
     네이버 뉴스에서 특정 키워드를 크롤링하여 s3에 저장합니다.
     """
 
-    @task(multiple_outputs=True)
-    def extract_data_from_naver_news() -> List[Dict]:
+    # return값 정의
+    news_type = TypedDict(
+        "news_type",
+        {
+            "publish_date": datetime,
+            "publisher": str,
+            "title": str,
+            "url": str,
+            "description": str,
+            "keyword": str,
+        },
+    )
+
+    @task
+    def extract_data_from_naver_news() -> List[news_type]:
 
         keywords = ["인천세종병원", "심장내과", "흉부외과", "환자경험평가"]
 
