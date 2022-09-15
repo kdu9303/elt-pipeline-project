@@ -31,8 +31,6 @@ class MessageProducer:
 
     def produce(self, data: dict = None) -> None:
 
-        logging.info("<<< producer start >>>")
-
         try:
             message_key = {"message_key": str(uuid.uuid4())}
 
@@ -44,7 +42,9 @@ class MessageProducer:
                 value=data,
             )
 
-            print(f"key: {message_key}, message: {data}")
+            # print(f"key: {message_key}, message: {data}")
+            logging.info(f"key: {message_key}, message: {data}")
+
             self.producer.flush()
 
         except KafkaError:
@@ -65,6 +65,7 @@ def send_example():
 
     data = {"name": "abc2", "email": "abc2@example.com"}
 
+    logging.info("<<< producer start >>>")
     message_producer.produce(data)
     logging.info("message sent successfully...")
 
