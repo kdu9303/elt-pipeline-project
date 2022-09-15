@@ -48,6 +48,7 @@ class MessageProducer:
 
         except KafkaError:
             logging.warning(traceback.format_exc())
+            raise
         except Exception as e:
             logging.warning(e)
 
