@@ -18,7 +18,7 @@
         "format.class": "io.confluent.connect.s3.format.avro.AvroFormat",
         "partitioner.class": "io.confluent.connect.storage.partitioner.TimeBasedPartitioner",
         "partition.duration.ms": "86400000",
-        "path.format": "YYYY-MM-dd",
+        "path.format": "'year'=YYYY/'month'=MM/'day'=dd",
         "timestamp.extractor": "RecordField",
         "timestamp.field":"publish_date",
 
