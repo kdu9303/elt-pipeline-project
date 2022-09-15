@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'airflow-dev-env/Dockerfile'
+      - 'airflow-dev-env/requirements.txt'
 
 jobs:
   push_to_registry:

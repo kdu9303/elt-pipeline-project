@@ -12,3 +12,4 @@ python-schema-registry-client
 fake-useragent
 beautifulsoup4
 SQLAlchemy
+typing_extensions
