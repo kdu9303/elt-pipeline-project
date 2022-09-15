@@ -1,0 +1,10 @@
+{
+    "type": "record",
+    "namespace": "eltproject.news_collection",
+    "name": "newscollection",
+    "fields" : [
+      {
+          "name" : "message_key", "type" : "string"
+      }
+    ]
+}

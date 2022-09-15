@@ -23,7 +23,7 @@
         "timestamp.field":"publish_date",
 
         "schema.generator.class": "io.confluent.connect.storage.hive.schema.DefaultSchemaGenerator",
-        "schema.compatibility": "FULL",
+        "schema.compatibility": "BACKWARD",
 
         "key.converter.schemas.enable":"true",
         "key.converter": "io.confluent.connect.avro.AvroConverter",

@@ -1,0 +1,26 @@
+{
+    "type": "record",
+    "namespace": "eltproject.news_collection",
+    "name": "newscollection",
+    "fields": [
+
+        {
+            "name": "publish_date", "type": ["null", {"type": "int", "logicalType": "date"}]
+        },
+        {
+            "name": "publisher", "type": ["null", "string"]
+        },
+        {
+            "name": "title", "type": "string"
+        },
+        {
+            "name": "url", "type": "string"
+        },
+        {
+            "name": "description", "type": ["null", "string"]
+        },
+        {
+            "name": "keyword", "type": "string"
+        }
+    ]
+}
