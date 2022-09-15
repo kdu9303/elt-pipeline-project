@@ -42,11 +42,11 @@ def scrape_news_data():
             topic, key_schema_path, value_schema_path
         )
 
-        keywords = ["인천세종병원", "심장내과", "흉부외과", "환자경험평가", "코로나19"]
+        keywords = ["인천세종병원", "부천세종병원", "심장내과", "흉부외과", "환자경험평가", "코로나19"]
 
         # 날짜 범위 지정
         current_date = datetime.now(pytz.timezone("Asia/Seoul"))
-        start_date = current_date - timedelta(days=3)
+        start_date = current_date - timedelta(days=14)
         end_date = current_date - timedelta(days=1)
 
         try:
