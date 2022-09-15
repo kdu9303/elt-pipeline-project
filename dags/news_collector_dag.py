@@ -46,7 +46,7 @@ def scrape_news_data():
 
         # 날짜 범위 지정
         current_date = datetime.now(pytz.timezone("Asia/Seoul"))
-        start_date = current_date - timedelta(days=14)
+        start_date = current_date - timedelta(days=3)
         end_date = current_date - timedelta(days=1)
 
         try:
