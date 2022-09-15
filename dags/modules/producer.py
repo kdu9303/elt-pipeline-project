@@ -55,8 +55,8 @@ class MessageProducer:
 
 def send_example():
 
-    key_schema_path = "/avro_schema/test_schema_key.avsc"
-    value_schema_path = "/avro_schema/test_schema_value.avsc"
+    key_schema_path = "/modules/avro_schema/test_schema_key.avsc"
+    value_schema_path = "/modules/avro_schema/test_schema_value.avsc"
     topic = "test"
 
     message_producer = MessageProducer(
