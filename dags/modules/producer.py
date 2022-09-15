@@ -42,7 +42,7 @@ class MessageProducer:
                 value=data,
             )
 
-            logging.info(f"key: {message_key}, message: {data}")
+            # logging.info(f"key: {message_key}, message: {data}")
 
             self.producer.flush()
 
