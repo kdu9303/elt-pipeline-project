@@ -1,0 +1,10 @@
+{
+    "type": "record",
+    "namespace": "test",
+    "name": "test",
+    "fields" : [
+      {
+          "name" : "message_key", "type" : "string"
+      }
+    ]
+}
