@@ -1,0 +1,13 @@
+{
+    "type": "record",
+    "namespace": "test",
+    "name": "test",
+    "fields" : [
+        {
+            "name": "name", "type": "string"
+        },
+        {
+            "name": "email", "type": "string"
+        }
+    ]
+}

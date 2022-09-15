@@ -18,7 +18,7 @@ class MessageProducer:
 
         self.producer_conf = {
             "bootstrap.servers": "43.201.13.181:9092,43.200.251.62:9092,52.78.78.140:9092",
-            "schema.registry.url": "http://43.200.243.204/:8081",
+            "schema.registry.url": "http://43.200.243.204:8081/",
             "acks": "all",
             "enable.idempotence": "True",
         }
@@ -55,16 +55,15 @@ class MessageProducer:
 
 def send_example():
 
-    key_schema_path = "avro_schema/test_schema_key.avsc"
-    # value_schema_path = 'avro_schema/news_collection_schema_value.avsc'
-    value_schema_path = ""
+    key_schema_path = "/avro_schema/test_schema_key.avsc"
+    value_schema_path = "/avro_schema/test_schema_value.avsc"
     topic = "test"
 
     message_producer = MessageProducer(
         topic, key_schema_path, value_schema_path
     )
 
-    data = {"name": "abc", "email": "abc@example.com"}
+    data = {"name": "abc2", "email": "abc2@example.com"}
 
     message_producer.produce(data)
 
