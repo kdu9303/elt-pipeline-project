@@ -27,8 +27,8 @@ def test_producer():
     Testing Kafka producer dag
     """
     topic = "test"
-    key_schema_path = "/avro_schema/test_schema_key.avsc"
-    value_schema_path = "/avro_schema/test_schema_value.avsc"
+    key_schema_path = "/modules/avro_schema/test_schema_key.avsc"
+    value_schema_path = "/modules/avro_schema/test_schema_value.avsc"
 
     @task
     def send_message():
