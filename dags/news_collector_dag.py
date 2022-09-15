@@ -2,7 +2,8 @@
 import pytz
 import logging
 import pendulum
-from typing import List, Dict, TypedDict
+from typing import List, Dict
+from typing_extensions import TypedDict
 from datetime import datetime, timedelta
 from airflow.decorators import dag, task
 from modules.producer import MessageProducer
