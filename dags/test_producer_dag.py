@@ -27,6 +27,7 @@ def test_producer():
     Testing Kafka producer dag
     """
     topic = "test"
+    # path는 docker 컨테이너 내부 경로로 설정
     key_schema_path = (
         "/opt/airflow/dags/modules/avro_schema/test_schema_key.avsc"
     )

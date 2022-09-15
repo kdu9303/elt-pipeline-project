@@ -42,7 +42,6 @@ class MessageProducer:
                 value=data,
             )
 
-            # print(f"key: {message_key}, message: {data}")
             logging.info(f"key: {message_key}, message: {data}")
 
             self.producer.flush()
@@ -55,8 +54,13 @@ class MessageProducer:
 
 def send_example():
 
-    key_schema_path = "/modules/avro_schema/test_schema_key.avsc"
-    value_schema_path = "/modules/avro_schema/test_schema_value.avsc"
+    # path는 docker 컨테이너 내부 경로로 설정
+    key_schema_path = (
+        "/opt/airflow/dags/modules/avro_schema/test_schema_key.avsc"
+    )
+    value_schema_path = (
+        "/opt/airflow/dags/modules/avro_schema/test_schema_value.avsc"
+    )
     topic = "test"
 
     message_producer = MessageProducer(
