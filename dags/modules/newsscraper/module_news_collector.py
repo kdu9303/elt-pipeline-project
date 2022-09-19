@@ -13,7 +13,7 @@ logger = logging.getLogger()
 
 
 class NaverNewsScraper:
-    def __init__(self, keyword: str):
+    def __init__(self, keyword: str) -> None:
         self.NAVER_BASE_URL = "https://search.naver.com/search.naver?"
         self.keyword = f'"{keyword}"'
 

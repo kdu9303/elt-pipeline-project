@@ -131,3 +131,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# secret file
+kosis_statistics_config.py

@@ -6,7 +6,7 @@ from typing import List
 import datetime
 from dateutil.rrule import rrule, MONTHLY
 from dateutil.relativedelta import relativedelta
-from kosis_statics_config import secret
+from kosis_statistics_config import secret
 
 # 로그 기록용
 logger = logging.getLogger()
