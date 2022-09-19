@@ -63,16 +63,21 @@ class CensusDataScraper:
 
         population = []
 
-        for date in self.generate_daterange():
+        for date in self.get_date_range():
             url = self.base_url + f"startPrdDe={date}&endPrdDe={date}"
 
             try:
                 r = requests.get(url)
 
                 if r.status_code == 200:
-                    # 데이터가 존재하지않으면 스킵한다
-                    if "err" in eval(r.text) == "30":
-                        continue
+
+                    if "err" in eval(r.text):
+
+                        # 데이터가 존재하지않으면 스킵한다
+                        if eval(r.text)["err"] == "30":
+                            continue
+                        else:
+                            raise ValueError(eval(r.text))
 
                     population.append(json.loads(r.text))
 
