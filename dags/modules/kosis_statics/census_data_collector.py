@@ -50,7 +50,7 @@ class CensusDataScraper:
         )
 
     # 날짜 제너레이터 생성
-    def generate_daterange(self) -> List[str]:
+    def get_date_range(self) -> List[str]:
         """YYYYMM str 형태로 변환"""
         return [
             dt.strftime("%Y%m")
