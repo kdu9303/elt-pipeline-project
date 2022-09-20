@@ -4,7 +4,7 @@ import pytz
 import urllib
 import logging
 import requests
-from typing import List, Dict
+from typing import List, Dict, Iterator
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -24,10 +24,6 @@ class NaverNewsScraper:
             if response.status_code == 200:
                 return response.text
 
-    ##############################################################################
-    # 초기 입력 변수 설정
-    ##############################################################################
-
     def parse_keyword(self) -> str:
         return urllib.parse.urlencode(
             {"query": self.keyword}, encoding="utf-8"
@@ -36,22 +32,20 @@ class NaverNewsScraper:
     def get_date_range(
         self, start_date: datetime, end_date: datetime
     ) -> List[str]:
-
-        # 날짜 제너레이터 생성
-        def daterange(start_date: datetime, end_date: datetime) -> List[str]:
+        def generate_date_range(
+            start_date: datetime, end_date: datetime
+        ) -> Iterator[datetime]:
+            """날짜 제너레이터 생성"""
 
             for n in range(int((end_date - start_date).days) + 1):
                 yield start_date + timedelta(n)
 
         date_range = []
-        for single_date in daterange(start_date, end_date):
+
+        for single_date in generate_date_range(start_date, end_date):
             date_range.append(single_date.strftime("%Y.%m.%d"))
 
         return date_range
-
-    ##############################################################################
-    # html 파싱
-    ##############################################################################
 
     def parse_html(
         self, fetcher_session: requests.Session, fetcher_url: str
@@ -66,12 +60,17 @@ class NaverNewsScraper:
         return html_parser.select(css_selector)
 
     def search(self, start_date: datetime, end_date: datetime) -> List[list]:
+        """
+        네이버 검색은 총 검색 건수를 표시하지 않으므로
+        첫 페이지를 먼저 받아 온 후 추가 페이지가 없을 때까지
+        반복문으로 자료를 수집한다.
+        """
 
         print(f"검색어: {self.keyword}")
         keyword = self.parse_keyword()
         date_range = self.get_date_range(start_date, end_date)
 
-        # 변수 설정
+        # Return 변수 설정
         publish_date = []
         publisher_list = []
         news_title_list = []
@@ -81,6 +80,7 @@ class NaverNewsScraper:
         for date in date_range:
 
             print(f"진행일자: {date}")
+
             with requests.Session() as session:
                 url_init = f"{self.NAVER_BASE_URL}where=news&{keyword}&sort=1&pd=3&ds={date}&de={date}&start=1"
                 html_parser = self.parse_html(session, url_init)
@@ -90,13 +90,13 @@ class NaverNewsScraper:
             )
             articles = self.get_selector_value(html_parser, article_selector)
 
-            # 초기 카운터
+            # 화면 내 기사 건수 카운터 설정
             news_count_per_page = len(articles)
             page_num = 0
 
             publish_date.append([date for _ in range(news_count_per_page)])
 
-            # 언론사 가져오기
+            # 언론사명
             publisher_selector = "div.group_news > ul.list_news > li div.news_area > div.news_info > div.info_group > a.info.press"
             publishers = self.get_selector_value(
                 html_parser, publisher_selector
@@ -105,15 +105,15 @@ class NaverNewsScraper:
                 [publisher.get_text(strip=True) for publisher in publishers]
             )
 
-            # 뉴스기사 제목 가져오기
+            # 뉴스기사 제목
             news_title_list.append(
                 [title.attrs["title"] for title in articles]
             )
 
-            # 뉴스기사 URL 가져오기
+            # 뉴스기사 URL
             news_url_list.append([url.attrs["href"] for url in articles])
 
-            # 뉴스 요약가져오기
+            # 뉴스 요약
             news_description_selector = "div.group_news > ul.list_news > li div.news_area > div.news_dsc > div.dsc_wrap > a"
             news_description = self.get_selector_value(
                 html_parser, news_description_selector
@@ -180,8 +180,6 @@ class NaverNewsScraper:
                                 ]
                             )
 
-                            # print("현재 페이지의 기사 갯수: " + str(news_count_per_page))
-
             except Exception as e:
                 logger.exception(f"{self.search.__name__} --> {e}")
                 raise
@@ -225,7 +223,7 @@ class NaverNewsScraper:
             for _ in range(len(news_collection_nested_list["title"]))
         ]
 
-        # dict형태로 변환
+        # 1:N 에서 1:1 key, value형태로 변환
         news_collection = [
             dict(zip(news_collection_nested_list.keys(), col))
             for col in zip(*news_collection_nested_list.values())
@@ -233,8 +231,11 @@ class NaverNewsScraper:
 
         return news_collection
 
-    def run(self, start_date, end_date):
-
+    def run(self, start_date: datetime, end_date: datetime):
+        """
+        search 함수로부터 데이터를 받고
+        news_data_wrangler 함수로 transform 해주는 main 함수
+        """
         (
             publish_date,
             publisher_list,
@@ -256,13 +257,14 @@ class NaverNewsScraper:
 
 if __name__ == "__main__":
 
-    keywords = ["인천세종병원", "심장내과", "흉부외과", "환자경험평가", "코로나19"]
+    keywords = ["환자경험평가", "코로나19"]
 
     current_date = datetime.now(pytz.timezone("Asia/Seoul"))
     # 이틀전
     start_date = current_date - timedelta(days=2)
-    # 일주일전
+
     # start_date = current_date - timedelta(weeks=1)
+
     # 한달전
     # start_date = (current_date - timedelta(days=current_date.day)).replace(day=1)
 

@@ -70,19 +70,22 @@ class CensusDataScraper:
                 r = requests.get(url)
 
                 if r.status_code == 200:
+                    result = json.loads(r.text)
 
-                    if "err" in eval(r.text):
+                    if "err" in result:
 
                         # 데이터가 존재하지않으면 스킵한다
-                        if eval(r.text)["err"] == "30":
+                        if "30" in result["err"]:
                             continue
-                        else:
-                            raise ValueError(eval(r.text))
 
-                    population.append(json.loads(r.text))
+                        else:
+                            raise ValueError(result)
+
+                    population.append(result)
 
                 else:
                     r.close()
+
             except Exception as e:
                 logger.exception(e)
                 raise
