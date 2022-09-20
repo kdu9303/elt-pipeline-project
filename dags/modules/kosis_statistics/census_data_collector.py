@@ -26,7 +26,7 @@ class CensusDataScraper:
     format:	결과 유형(json) (필수)
     """
 
-    def __init__(self, startPrdDe: datetime, endPrdDe: datetime) -> None:
+    def __init__(self) -> None:
 
         self._API_KEY = secret.KOSIS_API_SECRET
 
@@ -38,9 +38,6 @@ class CensusDataScraper:
         self.prdSe = "M"
         self.format = "json"
 
-        self.startPrdDe = startPrdDe
-        self.endPrdDe = endPrdDe
-
         self.base_url = (
             "https://kosis.kr/openapi/Param/statisticsParameterData.do?"
             f"method=getList&apiKey={self._API_KEY}&"
@@ -50,20 +47,22 @@ class CensusDataScraper:
         )
 
     # 날짜 제너레이터 생성
-    def get_date_range(self) -> List[str]:
+    def get_date_range(
+        self, startPrdDe: datetime.date, endPrdDe: datetime.date
+    ) -> List[str]:
         """YYYYMM str 형태로 변환"""
         return [
             dt.strftime("%Y%m")
-            for dt in rrule(
-                MONTHLY, dtstart=self.startPrdDe, until=self.endPrdDe
-            )
+            for dt in rrule(MONTHLY, dtstart=startPrdDe, until=endPrdDe)
         ]
 
-    def get_census_data(self) -> List[str]:
+    def get_census_data(
+        self, startPrdDe: datetime.date, endPrdDe: datetime.date
+    ) -> List[str]:
 
         population = []
 
-        for date in self.get_date_range():
+        for date in self.get_date_range(startPrdDe, endPrdDe):
             url = self.base_url + f"startPrdDe={date}&endPrdDe={date}"
 
             try:
@@ -99,10 +98,10 @@ if __name__ == "__main__":
 
     start_month = current_month + relativedelta(months=-2)
 
-    population = CensusDataScraper(
+    population = CensusDataScraper()
+
+    data = population.get_census_data(
         startPrdDe=start_month, endPrdDe=current_month
     )
-
-    data = population.get_census_data()
 
     print(data)
