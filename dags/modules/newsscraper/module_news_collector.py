@@ -113,7 +113,7 @@ class NaverNewsScraper:
             # 뉴스기사 URL
             news_url_list.append([url.attrs["href"] for url in articles])
 
-            # 뉴스 요약
+            # 뉴스 요약 정보
             news_description_selector = "div.group_news > ul.list_news > li div.news_area > div.news_dsc > div.dsc_wrap > a"
             news_description = self.get_selector_value(
                 html_parser, news_description_selector
@@ -125,18 +125,18 @@ class NaverNewsScraper:
             try:
                 with requests.Session() as session:
 
+                    # 다음 페이지가 존재 하지 않을 경우 article_selector value가 0이 된다
                     while news_count_per_page > 0:
 
                         page_num += 1
 
                         reset_url = f"{self.NAVER_BASE_URL}where=news&{keyword}&sort=1&pd=3&ds={date}&de={date}&start={1+page_num*10}"
-                        # print("new url: " + reset_url)
                         reset_html_parser = self.parse_html(session, reset_url)
                         reset_articles = self.get_selector_value(
                             reset_html_parser, article_selector
                         )
 
-                        # 검색 결과 갯수 갱신
+                        # 검색 결과 개수 갱신
                         news_count_per_page = len(reset_articles)
 
                         if news_count_per_page:
@@ -145,7 +145,6 @@ class NaverNewsScraper:
                                 [date for _ in range(news_count_per_page)]
                             )
 
-                            # 언론사 가져오기
                             reset_publishers = self.get_selector_value(
                                 reset_html_parser, publisher_selector
                             )
@@ -156,7 +155,6 @@ class NaverNewsScraper:
                                 ]
                             )
 
-                            # 뉴스기사 제목 가져오기
                             news_title_list.append(
                                 [
                                     title.attrs["title"]
@@ -164,12 +162,10 @@ class NaverNewsScraper:
                                 ]
                             )
 
-                            # 뉴스기사 URL 가져오기
                             news_url_list.append(
                                 [url.attrs["href"] for url in reset_articles]
                             )
 
-                            # 뉴스 요약가져오기
                             reset_news_description = self.get_selector_value(
                                 reset_html_parser, news_description_selector
                             )
