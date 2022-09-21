@@ -1,0 +1,10 @@
+{
+    "type": "record",
+    "namespace": "eltproject.census_data_collection",
+    "name": "censusdatacollection",
+    "fields" : [
+      {
+          "name" : "message_key", "type" : "string"
+      }
+    ]
+}

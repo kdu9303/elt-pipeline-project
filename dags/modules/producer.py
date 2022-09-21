@@ -47,10 +47,10 @@ class MessageProducer:
             self.producer.flush()
 
         except KafkaError:
-            logging.warning(traceback.format_exc())
+            logging.exception(traceback.format_exc())
             raise
         except Exception as e:
-            logging.warning(e)
+            logging.exception(e)
 
 
 def send_example():

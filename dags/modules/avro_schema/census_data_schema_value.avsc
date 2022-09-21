@@ -1,0 +1,56 @@
+{
+    "type": "record",
+    "namespace": "eltproject.census_data_collection",
+    "name": "censusdatacollection",
+    "fields": [
+
+        {
+            "name": "TBL_NM", "type": ["null", "string"]
+        },
+        {
+            "name": "PRD_DE", "type": "string"
+        },
+        {
+            "name": "TBL_ID", "type": "string"
+        },
+        {
+            "name": "ITM_NM", "type": ["null", "string"]
+        },
+        {
+            "name": "ITM_NM_ENG", "type": ["null", "string"]
+        },
+        {
+            "name": "ITM_ID", "type": "string"
+        },
+        {
+            "name": "UNIT_NM", "type": ["null", "string"]
+        },
+        {
+            "name": "ORG_ID", "type": "string"
+        },
+        {
+            "name": "UNIT_NM_ENG", "type": ["null", "string"]
+        },
+        {
+            "name": "C1_OBJ_NM", "type": ["null", "string"]
+        },
+        {
+            "name": "C1_OBJ_NM_ENG", "type": ["null", "string"]
+        },
+        {
+            "name": "DT", "type": "string"
+        },
+        {
+            "name": "PRD_SE", "type": ["null", "string"]
+        },
+        {
+            "name": "C1", "type": "string"
+        },
+        {
+            "name": "C1_NM", "type": ["null", "string"]
+        },
+        {
+            "name": "C1_NM_ENG", "type": ["null", "string"]
+        }
+    ]
+}

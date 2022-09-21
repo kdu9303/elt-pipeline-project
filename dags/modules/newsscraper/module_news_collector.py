@@ -29,20 +29,21 @@ class NaverNewsScraper:
             {"query": self.keyword}, encoding="utf-8"
         )
 
+    def generate_date_range(
+        self, start_date: datetime, end_date: datetime
+    ) -> Iterator[datetime]:
+        """날짜 제너레이터 생성"""
+
+        for n in range(int((end_date - start_date).days) + 1):
+            yield start_date + timedelta(n)
+
     def get_date_range(
         self, start_date: datetime, end_date: datetime
     ) -> List[str]:
-        def generate_date_range(
-            start_date: datetime, end_date: datetime
-        ) -> Iterator[datetime]:
-            """날짜 제너레이터 생성"""
-
-            for n in range(int((end_date - start_date).days) + 1):
-                yield start_date + timedelta(n)
 
         date_range = []
 
-        for single_date in generate_date_range(start_date, end_date):
+        for single_date in self.generate_date_range(start_date, end_date):
             date_range.append(single_date.strftime("%Y.%m.%d"))
 
         return date_range
