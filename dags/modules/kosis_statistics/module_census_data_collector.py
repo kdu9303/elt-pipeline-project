@@ -14,6 +14,9 @@ logger = logging.getLogger()
 
 class CensusDataScraper:
     """
+    통계청 API로부터 시군구 계층의 인구수를 1달 단위로
+    집계된 데이터를 불러온다.
+
     * Parameters *
     orgId: 기관 ID (필수)
     tblId: 통계표 ID (필수)
