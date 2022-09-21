@@ -38,7 +38,7 @@ def collect_census_data():
     def produce_data_to_broker() -> None:
 
         # producer config
-        topic = "news-collecion-s3-sink"
+        topic = "census_data_collection-s3-sink"
         key_schema_path = (
             "/opt/airflow/dags/modules/avro_schema/census_data_schema_key.avsc"
         )
