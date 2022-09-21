@@ -7,7 +7,9 @@ from airflow.models import DagBag
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../dags"))
 sys.path.append(os.path.join(os.path.dirname(__file__), "../dags/modules"))
-
+sys.path.append(
+    os.path.join(os.path.dirname(__file__), "../dags/modules/kosis_statistics")
+)
 # Airflow variables called from DAGs under test are stubbed out
 # os.environ["AIRFLOW_DATA_LAKE_BUCKET"] = ""
 
