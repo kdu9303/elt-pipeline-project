@@ -2,7 +2,7 @@
 import json
 import requests
 import logging
-from typing import List
+from typing import List, Dict
 import datetime
 from dateutil.rrule import rrule, MONTHLY
 from dateutil.relativedelta import relativedelta
@@ -64,7 +64,7 @@ class CensusDataScraper:
 
     def get_census_data(
         self, startPrdDe: datetime.date, endPrdDe: datetime.date
-    ) -> List[str]:
+    ) -> List[Dict]:
 
         population = []
 
