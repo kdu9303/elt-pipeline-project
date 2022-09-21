@@ -34,6 +34,7 @@ class CensusDataScraper:
     def __init__(self) -> None:
 
         self._API_KEY = Variable.get("KOSIS_API_SECRET")
+        # self._API_KEY = secret.KOSIS_API_SECRET # local
 
         self.orgId = "101"
         self.tblId = "DT_1B040A3"
@@ -94,14 +95,16 @@ class CensusDataScraper:
                 logger.exception(e)
                 raise
 
-        return population
+        population_flattened = [row for lists in population for row in lists]
+
+        return population_flattened
 
 
 if __name__ == "__main__":
 
     current_month = datetime.date.today().replace(day=1)
 
-    start_month = current_month + relativedelta(months=-6)
+    start_month = current_month + relativedelta(months=-1)
 
     population = CensusDataScraper()
 

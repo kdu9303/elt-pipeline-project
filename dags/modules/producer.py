@@ -3,6 +3,7 @@ import uuid
 import traceback
 import logging
 from kafka.errors import KafkaError
+from airflow.exceptions import AirflowException
 from confluent_kafka import avro
 from confluent_kafka.avro import AvroProducer
 
@@ -47,10 +48,20 @@ class MessageProducer:
             self.producer.flush()
 
         except KafkaError:
-            logging.exception(traceback.format_exc())
-            raise
-        except Exception as e:
-            logging.exception(e)
+            raise AirflowException(traceback.format_exc())
+
+        except TypeError:
+            raise AirflowException(
+                "Producer data type must be dictionary type"
+            )
+
+        except AttributeError:
+            raise AirflowException(
+                "Producer data type must be dictionary type"
+            )
+
+        except Exception:
+            raise AirflowException(traceback.format_exc())
 
 
 def send_example():
