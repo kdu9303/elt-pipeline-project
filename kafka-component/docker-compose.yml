@@ -90,6 +90,13 @@ services:
         /etc/confluent/docker/run &
         #
         sleep infinity
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    restart: always
+    ports:
+      - 9308:9308
+    command:
+      - --kafka.server=43.201.13.181:9092 --kafka.server=43.200.251.62:9092 --kafka.server=52.78.78.140:9092
   # unhealty 컨테이너를 재시작한다
   autoheal:
     image: willfarrell/autoheal:latest
