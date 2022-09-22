@@ -92,6 +92,7 @@ services:
         sleep infinity
   kafka-exporter:
     image: danielqsj/kafka-exporter:latest
+    container_name: kafka-exporter
     restart: always
     ports:
       - 9308:9308
@@ -99,6 +100,14 @@ services:
       - --kafka.server=43.201.13.181:9092
       - --kafka.server=43.200.251.62:9092
       - --kafka.server=52.78.78.140:9092
+  kafka-lag-exporter:
+    image: seglo/kafka-lag-exporter:latest
+    hostname: kafka-lag-exporter
+    restart: always
+    ports:
+      - 9999:9999
+    volumes:
+      - ./kafka-lag-exporter/:/opt/docker/conf/
   # unhealty 컨테이너를 재시작한다
   autoheal:
     image: willfarrell/autoheal:latest
