@@ -25,6 +25,7 @@ class NaverNewsScraper:
                 return response.text
 
     def parse_keyword(self) -> str:
+        """한글 키워드를 url에 삽입할 ASCII 텍스트 문자열로 변환 한다."""
         return urllib.parse.urlencode(
             {"query": self.keyword}, encoding="utf-8"
         )
@@ -40,7 +41,10 @@ class NaverNewsScraper:
     def get_date_range(
         self, start_date: datetime, end_date: datetime
     ) -> List[str]:
-
+        """
+        geterate_date_range로부터 datetime generator를 받아서
+        Naver search url 날짜 파라미터 형태(YYYY.mm.dd)의 string으로 반환한다.
+        """
         date_range = []
 
         for single_date in self.generate_date_range(start_date, end_date):
@@ -62,6 +66,9 @@ class NaverNewsScraper:
 
     def search(self, start_date: datetime, end_date: datetime) -> List[list]:
         """
+        Fetcher를 통해 받아온 html text를 1차로 정제하여
+        주제별 List에 담는다.
+
         네이버 검색은 총 검색 건수를 표시하지 않으므로
         첫 페이지를 먼저 받아 온 후 추가 페이지가 없을 때까지
         반복문으로 자료를 수집한다.
@@ -199,9 +206,14 @@ class NaverNewsScraper:
         news_description_list: List[str],
     ) -> Dict[str, str]:
 
-        """kafka message형태로 전환"""
+        """
+        1차로 정제된 Neseted List를
+        2차로 key:value kafka message형태로 변환한다
+        """
 
         news_collection_nested_list = {
+            # 네이버 검색시 일주일 이내 자료는 5일전, 6일전 형식으로 날짜가 표시되기때문에
+            # 일자별 검색 for문에서 해당 날짜를 수동으로 넣는다
             "publish_date": [
                 datetime.strptime(row, "%Y.%m.%d")
                 for lists in publish_date
@@ -230,8 +242,7 @@ class NaverNewsScraper:
 
     def run(self, start_date: datetime, end_date: datetime):
         """
-        search 함수로부터 데이터를 받고
-        news_data_wrangler 함수로 transform 해주는 main 함수
+        Data transfrom을 실행하는 함수
         """
         (
             publish_date,

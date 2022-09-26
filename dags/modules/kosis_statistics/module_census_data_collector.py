@@ -92,7 +92,7 @@ class CensusDataScraper:
                     r.close()
 
             except Exception as e:
-                logger.exception(e)
+                logger.exception(f"{self.get_census_data.__name__} --> {e}")
                 raise
 
         population_flattened = [row for lists in population for row in lists]
