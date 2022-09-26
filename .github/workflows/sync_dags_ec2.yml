@@ -14,7 +14,7 @@ jobs:
   deploy:
     name: Push to airflow EC2 Instance
     runs-on: ubuntu-latest
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
