@@ -4,6 +4,9 @@ import pendulum
 from datetime import datetime, timedelta
 from airflow.decorators import dag, task
 from airflow.exceptions import AirflowException
+from airflow.providers.amazon.aws.operators.glue_crawler import (
+    GlueCrawlerOperator,
+)
 from modules.producer import MessageProducer
 from modules.newsscraper.module_news_collector import NaverNewsScraper
 
@@ -45,7 +48,7 @@ def scrape_news_data():
 
         # 날짜 범위 지정
         current_date = datetime.now(pendulum.timezone("Asia/Seoul"))
-        start_date = current_date - timedelta(days=3)
+        start_date = current_date - timedelta(days=6)
         end_date = current_date - timedelta(days=1)
 
         try:
@@ -60,8 +63,16 @@ def scrape_news_data():
         except Exception as e:
             raise AirflowException(e)
 
+    glue_crawler_config = {"Name": "elt-project-data-crawler"}
+    run_glue_crawl_s3 = GlueCrawlerOperator(
+        task_id="run_glue_crawl_s3",
+        aws_conn_id="aws_connection",
+        config=glue_crawler_config,
+        wait_for_completion=False,
+    )
+
     # task flow
-    produce_data_to_broker()
+    produce_data_to_broker() >> run_glue_crawl_s3
 
 
 dag = scrape_news_data()
