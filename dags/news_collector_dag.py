@@ -68,7 +68,7 @@ def scrape_news_data():
         task_id="run_glue_crawl_s3",
         aws_conn_id="aws_connection",
         config=glue_crawler_config,
-        wait_for_completion=False,
+        wait_for_completion=True,
     )
 
     # task flow
