@@ -67,6 +67,9 @@ services:
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
       CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+      # kafka-connect-ui config
+      CONNECT_ACCESS_CONTROL_ALLOW_METHODS: GET,POST,PUT,OPTIONS
+      CONNECT_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       # AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
@@ -115,6 +118,16 @@ services:
         /etc/confluent/docker/run &
         #
         sleep infinity
+  kafka-connect-ui:
+    image: landoop/kafka-connect-ui
+    container_name: kafka-connect-ui
+    restart: always
+    depends_on:
+      - kafka-connect
+    ports:
+      - 18000:8000
+    environment:
+        CONNECT_URL: 'http://43.200.243.204:8083'
   kafka-exporter:
     image: danielqsj/kafka-exporter:latest
     container_name: kafka-exporter
