@@ -1,12 +1,12 @@
 {
-    "name": "news_collecion",
+    "name": "news_collection",
     "config": {
 
         "connector.class": "io.confluent.connect.s3.S3SinkConnector",
         "tasks.max": "1",
 
-        "topics": "news-collecion-s3-sink",
-        "topics.dir": "news_collecion",
+        "topics": "news_collection-s3-sink",
+        "topics.dir": "news_collection",
 
         "s3.region": "ap-northeast-2",
         "s3.bucket.name": "etl-project-bucket-20220817",

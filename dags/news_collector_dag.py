@@ -37,7 +37,7 @@ def scrape_news_data():
     def produce_data_to_broker() -> None:
 
         # producer config
-        topic = "news-collecion-s3-sink"
+        topic = "news_collection-s3-sink"
         key_schema_path = "/opt/airflow/dags/modules/avro_schema/news_collection_schema_key.avsc"
         value_schema_path = "/opt/airflow/dags/modules/avro_schema/news_collection_schema_value.avsc"
         message_producer = MessageProducer(
