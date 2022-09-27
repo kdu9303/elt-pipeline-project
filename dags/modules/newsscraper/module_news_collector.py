@@ -199,7 +199,7 @@ class NaverNewsScraper:
 
     def news_data_wrangler(
         self,
-        publish_date: str,
+        publish_date: List[str],
         publisher_list: List[str],
         news_title_list: List[str],
         news_url_list: List[str],
@@ -214,11 +214,7 @@ class NaverNewsScraper:
         news_collection_nested_list = {
             # 네이버 검색시 일주일 이내 자료는 5일전, 6일전 형식으로 날짜가 표시되기때문에
             # 일자별 검색 for문에서 해당 날짜를 수동으로 넣는다
-            "publish_date": [
-                datetime.strptime(row, "%Y.%m.%d")
-                for lists in publish_date
-                for row in lists
-            ],
+            "publish_date": [row for lists in publish_date for row in lists],
             "publisher": [row for lists in publisher_list for row in lists],
             "title": [row for lists in news_title_list for row in lists],
             "url": [row for lists in news_url_list for row in lists],

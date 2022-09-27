@@ -48,7 +48,7 @@ def scrape_news_data():
 
         # 날짜 범위 지정
         current_date = datetime.now(pendulum.timezone("Asia/Seoul"))
-        start_date = current_date - timedelta(days=6)
+        start_date = current_date - timedelta(days=7)
         end_date = current_date - timedelta(days=1)
 
         try:

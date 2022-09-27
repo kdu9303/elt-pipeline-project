@@ -21,6 +21,9 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "PLAINTEXT://43.201.13.181:9092,PLAINTEXT://43.200.251.62:9092,PLAINTEXT://52.78.78.140:9092"
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      # schema-registry-ui config
+      SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS: GET,POST,PUT,OPTIONS
+      SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
   schema-registry-ui:
     image: landoop/schema-registry-ui
     container_name: schema-registry-ui
@@ -30,7 +33,7 @@ services:
     ports:
       - 8000:8000
     environment:
-        SCHEMAREGISTRY_URL: 'http://schema-registry:8081'
+        SCHEMAREGISTRY_URL: 'http://43.200.243.204:8081'
         ALLOW_GLOBAL: true
         ALLOW_TRANSITIVE: true
         ALLOW_DELETION: true
