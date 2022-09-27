@@ -21,6 +21,19 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "PLAINTEXT://43.201.13.181:9092,PLAINTEXT://43.200.251.62:9092,PLAINTEXT://52.78.78.140:9092"
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+  schema-registry-ui:
+    image: landoop/schema-registry-ui
+    container_name: schema-registry-ui
+    restart: always
+    depends_on:
+      - schema-registry
+    ports:
+      - 8000:8000
+    environment:
+        SCHEMAREGISTRY_URL: 'http://schema-registry:8081'
+        ALLOW_GLOBAL: true
+        ALLOW_TRANSITIVE: true
+        ALLOW_DELETION: true
   kafka-connect:
     image: confluentinc/cp-kafka-connect-base:6.1.0
     user: root

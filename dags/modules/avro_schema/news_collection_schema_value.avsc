@@ -5,7 +5,7 @@
     "fields": [
 
         {
-            "name": "publish_date", "type": ["null", {"type": "int", "logicalType": "date"}]
+            "name": "publish_date", "type": ["null", "string"]
         },
         {
             "name": "publisher", "type": ["null", "string"]
