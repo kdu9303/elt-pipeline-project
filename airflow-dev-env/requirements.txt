@@ -1,7 +1,4 @@
-apache-airflow-providers-amazon==4.0.0
-apache-airflow-providers-slack==3.0.0
 airflow-provider-kafka
-spyder-kernels
 confluent-kafka
 aiokafka
 requests
@@ -14,3 +11,7 @@ fake-useragent
 beautifulsoup4
 SQLAlchemy
 typing_extensions
+pyspark
+apache-airflow-providers-amazon==4.0.0
+apache-airflow-providers-slack==3.0.0
+apache-airflow-providers-apache-spark==3.0.0
