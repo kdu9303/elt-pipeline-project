@@ -26,7 +26,7 @@ def spark_job_http_request_test():
     Livy rest api를 통해 spark job을 할당해주는 dag입니다.
     """
     run_spark_batch_job = LivyOperator(
-        name="run_spark_batch_job",  # job name
+        name="run_spark_batch_job",  # job name..
         file="/opt/airflow/dags/modules/spark_job_teset.py",
         livy_conn_id="livy_connection",
         task_id="run_spark_batch_job",
