@@ -39,8 +39,6 @@ jobs:
           port: '22'
           script: |
             cd /home/ec2-user/airflow
-            docker system prune -a
-            docker stop $(docker ps -a -q)
-            docker rm $(docker ps -a -q)
-            docker rmi $(docker images -a -q)
+            docker-compose down
+            docker system prune --all --force
             docker-compose up -d
