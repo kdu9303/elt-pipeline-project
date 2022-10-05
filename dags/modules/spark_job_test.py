@@ -65,3 +65,4 @@ df = (
 )
 
 df.show()
+df.printSchema()
