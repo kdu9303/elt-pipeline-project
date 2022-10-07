@@ -40,7 +40,7 @@ def spark_job_http_request_test():
     transter_python_script = SFTPOperator(
         task_id="transter_python_script",
         ssh_conn_id="spark_master_host_connection",
-        local_filepath=f"/opt/airflow/dags/modules/{file_name}",
+        local_filepath=f"/opt/airflow/dags/modules/{file_name}",  # Spark 서버 전송 파일
         remote_filepath=remote_file_path,
         operation="put",
         create_intermediate_dirs=True,
@@ -48,9 +48,9 @@ def spark_job_http_request_test():
 
     @task
     def run_spark_batch_job():
-        postfix = datetime.now().strftime("%Y%m%d-%H%M%S")
+        post_fix = datetime.now().strftime("%Y%m%d-%H%M%S")
         # 배치 이름이 겹치면 오류
-        batch_name = f"<{file_name}>-spark_job-{postfix}"
+        batch_name = f"<{file_name}>-spark_job-{post_fix}"
         spark_host_local_file_path = f"file:{remote_file_path}"
 
         livy_hook = LivyHook(livy_conn_id="livy_connection")
