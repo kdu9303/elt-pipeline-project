@@ -36,7 +36,7 @@ def s3_sensor_test():
         bucket_key=f"s3://etl-project-bucket-20220817/news_collection/news_collection-s3-sink/{folder_name}/*",
         wildcard_match=True,
         aws_conn_id="aws_connection",
-        timeout=18 * 60 * 60,
+        timeout=600,
         poke_interval=60,
     )
 
