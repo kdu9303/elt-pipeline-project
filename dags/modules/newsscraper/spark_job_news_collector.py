@@ -87,6 +87,12 @@ source_df = (
     .load(S3_DATA_SOURCE_PATH)
 )
 
+# delta target path 설정
+S3_DELTA_ACCESS_POINT_ALIAS = (
+    "etl-project-bucket-d-5j9ze83mfdo93wc49uth4j369r9o4apn2b-s3alias"
+)
+S3_DATA_DELTA_PATH = f"s3a://{S3_DELTA_ACCESS_POINT_ALIAS}/news_collection/"
+
 # transform process
 update_df = source_df.dropDuplicates(["publish_date", "url", "title"])
 
@@ -94,11 +100,6 @@ update_df = update_df.withColumn(
     "keyword", F.regexp_extract(F.col("keyword"), "[가-힣a-zA-Z0-9]+", 0)
 ).withColumn("publish_date", F.to_date(F.col("publish_date"), "yyyy.MM.dd"))
 
-# delta target path 설정
-S3_DELTA_ACCESS_POINT_ALIAS = (
-    "etl-project-bucket-d-5j9ze83mfdo93wc49uth4j369r9o4apn2b-s3alias"
-)
-S3_DATA_DELTA_PATH = f"s3a://{S3_DELTA_ACCESS_POINT_ALIAS}/news_collection/"
 
 # DeltaTable 인스턴스 생성
 try:
