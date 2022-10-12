@@ -60,7 +60,7 @@ def spark_job_http_request_test():
         file_name=file_name,
     )
 
-    transter_python_script >> run_spark_batch_job >> wait_for_input_file
+    transter_python_script >> wait_for_input_file >> run_spark_batch_job
 
 
 dag = spark_job_http_request_test()
