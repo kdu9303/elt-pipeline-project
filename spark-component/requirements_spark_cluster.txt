@@ -1,0 +1,7 @@
+pyarrow
+pandas
+numpy
+SQLAlchemy
+typing_extensions
+pyspark==3.2.2
+delta-spark==2.0.0
