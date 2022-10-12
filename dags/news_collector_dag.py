@@ -57,7 +57,7 @@ def scrape_news_data():
 
         # 날짜 범위 지정
         current_date = datetime.now(pendulum.timezone("Asia/Seoul"))
-        start_date = current_date - timedelta(days=14)
+        start_date = current_date - timedelta(days=3)
         end_date = current_date - timedelta(days=1)
 
         try:
@@ -109,6 +109,7 @@ def scrape_news_data():
         task_id="run_spark_batch_job",
         livy_conn_id="livy_connection",
         file_name=file_name,
+        delete_session=False,
     )
 
     # task flow

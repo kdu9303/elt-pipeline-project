@@ -19,12 +19,14 @@ class SparkSubmitOperator(BaseOperator):
         file_name: str,
         livy_conn_id: str,
         polling_interval: int = 15,
+        delete_session: bool = False,
         **kwargs: Any,
     ) -> None:
 
         self.file_name = file_name
         self._livy_conn_id = livy_conn_id
         self._polling_interval = polling_interval
+        self.delete_session = delete_session
         self._livy_hook: LivyHook = None
         super().__init__(**kwargs)
 
@@ -50,7 +52,7 @@ class SparkSubmitOperator(BaseOperator):
         self.poll_for_termination(self._batch_id)
 
         # 세션 삭제
-        if self._batch_id is not None:
+        if self.delete_session and self._batch_id is not None:
             livy_hook.delete_batch(self._batch_id)
 
     def poll_for_termination(self, batch_id) -> None:
