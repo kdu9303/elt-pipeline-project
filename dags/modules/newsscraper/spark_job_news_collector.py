@@ -2,12 +2,13 @@
 import os
 import configparser
 from datetime import datetime
+from typing import Dict
 from pyspark.sql import SparkSession
 import pyspark.sql.functions as F
 from pyspark.sql.utils import AnalysisException
 
 
-def get_aws_keys(profile):
+def get_aws_keys(profile: str) -> Dict[str, str]:
     awsCreds = {}
     Config = configparser.ConfigParser()
     Config.read(os.path.expanduser("/home/ec2-user/.aws/credentials"))
@@ -48,7 +49,7 @@ spark.sparkContext.addPyFile(
     "/home/ec2-user/spark/jars/delta-core_2.12-2.0.0.jar"
 )
 
-# spark session을 생성한 이후에 import
+# spark session을 생성한 이후 delta lake 모듈을 불러올 수 있음
 from delta.tables import *  # noqa: E402, F403, F405
 
 # hadoop s3a config
@@ -93,13 +94,13 @@ update_df = update_df.withColumn(
     "keyword", F.regexp_extract(F.col("keyword"), "[가-힣a-zA-Z0-9]+", 0)
 ).withColumn("publish_date", F.to_date(F.col("publish_date"), "yyyy.MM.dd"))
 
-# delta path 설정
+# delta target path 설정
 S3_DELTA_ACCESS_POINT_ALIAS = (
     "etl-project-bucket-d-5j9ze83mfdo93wc49uth4j369r9o4apn2b-s3alias"
 )
 S3_DATA_DELTA_PATH = f"s3a://{S3_DELTA_ACCESS_POINT_ALIAS}/news_collection/"
 
-# Create DeltaTable instances
+# DeltaTable 인스턴스 생성
 try:
     delta_table = DeltaTable.forPath(spark, S3_DATA_DELTA_PATH)  # noqa: F405
 except AnalysisException:
@@ -107,6 +108,7 @@ except AnalysisException:
     update_df.write.mode("overwrite").format("delta").save(S3_DATA_DELTA_PATH)
 
 # Perform Upsert
+# Delta table에 update_df를 Update or Insert하는 과정
 delta_table.alias("old_data").merge(
     update_df.alias("new_data"), "old_data.url = new_data.url"
 ).whenMatchedUpdate(
