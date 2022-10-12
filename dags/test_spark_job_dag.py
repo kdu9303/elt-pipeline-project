@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import logging
 import pendulum
-from datetime import datetime
-from time import sleep
-from airflow.decorators import dag, task
-from airflow.exceptions import AirflowException
-from airflow.providers.apache.livy.hooks.livy import BatchState, LivyHook
+
+# from datetime import datetime
+# from time import sleep
+from airflow.decorators import dag
+
+# from airflow.exceptions import AirflowException
+# from airflow.providers.apache.livy.hooks.livy import BatchState, LivyHook
 from airflow.providers.sftp.operators.sftp import SFTPOperator
+from modules.spark_job_livy_custom_operator import SparkSubmitOperator
 from datetime import timedelta
 
 logger = logging.getLogger()
@@ -34,54 +37,61 @@ def spark_job_http_request_test():
     # spark job script
     file_name = "spark_job_test.py"
 
-    remote_file_path = f"/home/ec2-user/spark-data/{file_name}"
+    # Spark Driver로 전송할 Script
+    local_file_path = f"/opt/airflow/dags/modules/{file_name}"
 
     # Airflow Server에서 Spark driver Server로 스크립트 전송
     transter_python_script = SFTPOperator(
         task_id="transter_python_script",
         ssh_conn_id="spark_master_host_connection",
-        local_filepath=f"/opt/airflow/dags/modules/{file_name}",  # Spark 서버 전송 파일
-        remote_filepath=remote_file_path,
+        local_filepath=local_file_path,
+        remote_filepath=f"/home/ec2-user/spark-data/{file_name}",
         operation="put",
         create_intermediate_dirs=True,
     )
 
     # File Sensor
 
-    @task
-    def run_spark_batch_job():
-        post_fix = datetime.now().strftime("%Y%m%d-%H%M%S")
-        # 배치 이름이 겹치면 오류
-        batch_name = f"<{file_name}>-spark_job-{post_fix}"
-        spark_host_local_file_path = f"file:{remote_file_path}"
+    run_spark_batch_job = SparkSubmitOperator(
+        task_id="run_spark_batch_job",
+        livy_conn_id="livy_connection",
+        file_name=file_name,
+    )
 
-        livy_hook = LivyHook(livy_conn_id="livy_connection")
+    # @task
+    # def run_spark_batch_job():
+    #     post_fix = datetime.now().strftime("%Y%m%d-%H%M%S")
+    #     # 배치 이름이 겹치면 오류
+    #     batch_name = f"<{file_name}>-spark_job-{post_fix}"
+    #     spark_host_local_file_path = f"file:{remote_file_path}"
 
-        batch_id = livy_hook.post_batch(
-            name=batch_name, file=spark_host_local_file_path
-        )
+    #     livy_hook = LivyHook(livy_conn_id="livy_connection")
 
-        state = livy_hook.get_batch_state(batch_id)
+    #     batch_id = livy_hook.post_batch(
+    #         name=batch_name, file=spark_host_local_file_path
+    #     )
 
-        while state not in livy_hook.TERMINAL_STATES:
-            logger.debug(
-                f"Batch with id {batch_id} is in state: {state.value}"
-            )
-            # 10초에 한번씩 status check
-            sleep(10)
-            state = livy_hook.get_batch_state(batch_id)
+    #     state = livy_hook.get_batch_state(batch_id)
 
-        logger.info(
-            f"Batch with id {batch_id} terminated with state: {state.value}"
-        )
+    #     while state not in livy_hook.TERMINAL_STATES:
+    #         logger.debug(
+    #             f"Batch with id {batch_id} is in state: {state.value}"
+    #         )
+    #         # 10초에 한번씩 status check
+    #         sleep(10)
+    #         state = livy_hook.get_batch_state(batch_id)
 
-        if state != BatchState.SUCCESS:
-            raise AirflowException(f"Batch {batch_id} did not succeed")
+    #     logger.info(
+    #         f"Batch with id {batch_id} terminated with state: {state.value}"
+    #     )
 
-        if batch_id is not None:
-            livy_hook.delete_batch(batch_id)
+    #     if state != BatchState.SUCCESS:
+    #         raise AirflowException(f"Batch {batch_id} did not succeed")
 
-    transter_python_script >> run_spark_batch_job()
+    #     if batch_id is not None:
+    #         livy_hook.delete_batch(batch_id)
+
+    transter_python_script >> run_spark_batch_job
 
 
 dag = spark_job_http_request_test()
