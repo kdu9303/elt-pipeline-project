@@ -32,7 +32,7 @@ class SparkSubmitOperator(BaseOperator):
         self._livy_hook = LivyHook(livy_conn_id=self._livy_conn_id)
         return self._livy_hook
 
-    def execute(self):
+    def execute(self, context) -> Any:
         # 배치 이름이 겹치는 오류 방지
         post_fix = datetime.now().strftime("%Y%m%d-%H%M%S")
 
@@ -53,7 +53,7 @@ class SparkSubmitOperator(BaseOperator):
         if self._batch_id is not None:
             livy_hook.delete_batch(self._batch_id)
 
-    def poll_for_termination(self, batch_id):
+    def poll_for_termination(self, batch_id) -> None:
         """spark job의 성공여부를 체크 후 세션을 종료한다"""
         livy_hook = self.get_hook()
         state = livy_hook.get_batch_state(batch_id)
