@@ -30,10 +30,10 @@ def spark_job_http_request_test():
     Livy rest api를 통해 spark job을 할당해주는 dag입니다.
     """
     # spark job script
-    file_name = "spark_job_test.py"
+    file_name = "spark_job_news_collector.py"
 
     # Spark Driver로 전송할 Script
-    local_file_path = f"/opt/airflow/dags/modules/{file_name}"
+    local_file_path = f"/opt/airflow/dags/modules/newsscraper/{file_name}"
     remote_file_path = f"/home/ec2-user/spark-data/{file_name}"
 
     # Airflow Server에서 Spark driver Server로 스크립트 전송

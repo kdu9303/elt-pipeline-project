@@ -25,8 +25,9 @@ def get_aws_keys(profile: str) -> Dict[str, str]:
 awsKeys = get_aws_keys("default")
 Access_key_ID = awsKeys["aws_access_key_id"]
 Secret_access_key = awsKeys["aws_secret_access_key"]
-
+# -------------------------------------------------------------------
 # spark config
+# -------------------------------------------------------------------
 spark = (
     SparkSession.builder.master("yarn")
     .appName("test")
@@ -52,7 +53,9 @@ spark.sparkContext.addPyFile(
 # spark session을 생성한 이후 delta lake 모듈을 불러올 수 있음
 from delta.tables import *  # noqa: E402, F403, F405
 
+# -------------------------------------------------------------------
 # hadoop s3a config
+# -------------------------------------------------------------------
 hadoop_conf = spark.sparkContext._jsc.hadoopConfiguration()
 hadoop_conf.set("com.amazonaws.services.s3.enableV4", "true")
 hadoop_conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
@@ -94,7 +97,7 @@ S3_DELTA_ACCESS_POINT_ALIAS = (
 S3_DATA_DELTA_PATH = f"s3a://{S3_DELTA_ACCESS_POINT_ALIAS}/news_collection/"
 
 # transform process
-update_df = source_df.dropDuplicates(["publish_date", "url", "title"])
+update_df = source_df.distinct()
 
 update_df = update_df.withColumn(
     "keyword", F.regexp_extract(F.col("keyword"), "[가-힣a-zA-Z0-9]+", 0)
@@ -108,10 +111,13 @@ except AnalysisException:
     # Create DeltaTable instances
     update_df.write.mode("overwrite").format("delta").save(S3_DATA_DELTA_PATH)
 
+# -------------------------------------------------------------------
 # Perform Upsert
+# -------------------------------------------------------------------
 # Delta table에 update_df를 Update or Insert하는 과정
 delta_table.alias("old_data").merge(
-    update_df.alias("new_data"), "old_data.url = new_data.url"
+    update_df.alias("new_data"),
+    "old_data.url = new_data.url AND old_data.keyword = new_data.keyword",
 ).whenMatchedUpdate(
     set={
         "publish_date": "new_data.publish_date",
@@ -120,3 +126,22 @@ delta_table.alias("old_data").merge(
         "description": "new_data.description",
     }
 ).whenNotMatchedInsertAll().execute()
+
+# remove possible duplicate rows
+delta_table.toDF().createOrReplaceTempView("news")
+
+duplicate_rows = (
+    (
+        spark.sql(
+            "SELECT *, ROW_NUMBER() OVER (PARTITION BY url, keyword ORDER BY publish_date DESC) row_num FROM news"
+        )
+    )
+    .filter(F.col("row_num") > 1)
+    .drop("row_num")
+    .distinct()
+)
+
+delta_table.alias("main").merge(
+    duplicate_rows.alias("duplicate_rows"),
+    "main.url = duplicate_rows.url AND main.keyword = duplicate_rows.keyword",
+).whenMatchedDelete().execute()

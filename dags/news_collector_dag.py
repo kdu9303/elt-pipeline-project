@@ -109,6 +109,7 @@ def scrape_news_data():
         task_id="run_spark_batch_job",
         livy_conn_id="livy_connection",
         file_name=file_name,
+        polling_interval=30,
         delete_session=False,
     )
 
