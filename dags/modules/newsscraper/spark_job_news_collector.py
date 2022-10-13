@@ -30,7 +30,7 @@ Secret_access_key = awsKeys["aws_secret_access_key"]
 # -------------------------------------------------------------------
 spark = (
     SparkSession.builder.master("yarn")
-    .appName("test")
+    .appName("News_Collector_Transfrom")
     .config("spark.driver.memory", "4g")
     .config("spark.executor.memory", "2g")
     .config("spark.yarn.am.memory", "2g")
