@@ -30,12 +30,11 @@ Secret_access_key = awsKeys["aws_secret_access_key"]
 # -------------------------------------------------------------------
 spark = (
     SparkSession.builder.master("yarn")
+    .config("spark.submit.deployMode", "cluster")
     .appName("News_Collector_Transfrom")
-    .config("spark.driver.memory", "4g")
-    .config("spark.executor.memory", "2g")
-    .config("spark.yarn.am.memory", "2g")
-    .config("spark.executor.cores", 3)
-    .config("spark.executor.instances", 1)
+    .config("spark.driver.memory", "2g")
+    .config("spark.driver.cores", 1)
+    .config("spark.executor.instances", 2)
     .config("spark.jars.packages", "io.delta:delta-core_2.12:2.0.0")
     .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
     .config(
@@ -145,3 +144,5 @@ delta_table.alias("main").merge(
     duplicate_rows.alias("duplicate_rows"),
     "main.url = duplicate_rows.url AND main.keyword = duplicate_rows.keyword",
 ).whenMatchedDelete().execute()
+
+spark.stop()
