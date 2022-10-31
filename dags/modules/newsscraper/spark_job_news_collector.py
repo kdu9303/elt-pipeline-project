@@ -79,7 +79,8 @@ S3_SOURCE_ACCESS_POINT_ALIAS = (
     "etl-project-bucket-os3osysqodthpasbb5yqre5ot7jeaapn2a-s3alias"
 )
 SORUCE_PROCESS_DATE = datetime.now().strftime("%Y-%m-%d")
-S3_DATA_SOURCE_PATH = f"s3a://{S3_SOURCE_ACCESS_POINT_ALIAS}/news_collection/news_collection-s3-sink/{SORUCE_PROCESS_DATE}/*"
+# S3_DATA_SOURCE_PATH = f"s3a://{S3_SOURCE_ACCESS_POINT_ALIAS}/news_collection/news_collection-s3-sink/{SORUCE_PROCESS_DATE}/*"
+S3_DATA_SOURCE_PATH = f"s3a://{S3_SOURCE_ACCESS_POINT_ALIAS}/news_collection/news_collection-s3-sink/*"
 
 source_df = (
     spark.read.format("avro")

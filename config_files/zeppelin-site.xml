@@ -1,0 +1,11 @@
+<property>
+  <name>zeppelin.server.addr</name>
+  <value>0.0.0.0</value>
+  <description>Server binding address</description>
+</property>
+
+<property>
+  <name>zeppelin.server.port</name>
+  <value>18888</value>
+  <description>Server port.</description>
+</property>
