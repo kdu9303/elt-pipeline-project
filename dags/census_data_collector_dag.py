@@ -25,6 +25,7 @@ default_args = {
 @dag(
     default_args=default_args,
     schedule_interval=None,
+    catchup=False,
     start_date=pendulum.datetime(2021, 1, 1, tz="Asia/Seoul"),
     tags=["census_data_collection"],
 )

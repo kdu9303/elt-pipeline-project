@@ -23,7 +23,7 @@ default_args = {
 
 @dag(
     default_args=default_args,
-    schedule_interval="30 */1 * * * *",
+    schedule_interval=None,
     start_date=pendulum.datetime(2022, 11, 2, tz="Asia/Seoul"),
     tags=["air_qality"],
 )
