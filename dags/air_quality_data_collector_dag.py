@@ -23,8 +23,8 @@ default_args = {
 
 @dag(
     default_args=default_args,
-    schedule_interval="30 * * * *",
-    start_date=pendulum.datetime(2021, 1, 1, tz="Asia/Seoul"),
+    schedule_interval="30 */1 * * * *",
+    start_date=pendulum.datetime(2022, 11, 2, tz="Asia/Seoul"),
     tags=["air_qality"],
 )
 def scrape_air_quality_data():
@@ -47,7 +47,7 @@ def scrape_air_quality_data():
     def produce_data_to_broker() -> None:
 
         # producer config
-        topic = "air_qality-s3-sink"
+        topic = "air_quality-s3-sink"
         key_schema_path = (
             "/opt/airflow/dags/modules/avro_schema/air_quality_schema_key.avsc"
         )
@@ -74,7 +74,7 @@ def scrape_air_quality_data():
     partition_folder_name = datetime.now().strftime("%Y-%m-%d")
     S3_data_upload_checker = S3KeySensor(
         task_id="S3_data_upload_checker",
-        bucket_key=f"s3://etl-project-bucket-20220817/news_collection/news_collection-s3-sink/{partition_folder_name}/*",
+        bucket_key=f"s3://etl-project-bucket-20220817/air_quality/air_quality-s3-sink/{partition_folder_name}/*",
         wildcard_match=True,
         aws_conn_id="aws_connection",
         timeout=600,
