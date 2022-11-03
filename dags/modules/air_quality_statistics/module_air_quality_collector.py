@@ -3,9 +3,9 @@ import json
 import requests
 import logging
 from typing import Dict
+from airflow.models import Variable
 
-# from airflow.models import Variable
-from air_quality_statistics_config import secret
+# from air_quality_statistics_config import secret
 
 # 로그 기록용
 logger = logging.getLogger()
@@ -28,8 +28,8 @@ class AirQualityDataScraper:
 
     def __init__(self) -> None:
 
-        # self._API_KEY = Variable.get("OPEN_API_SECRET")
-        self._API_KEY = secret.OPEN_API_SECRET  # local
+        self._API_KEY = Variable.get("OPEN_API_SECRET")
+        # self._API_KEY = secret.OPEN_API_SECRET  # local
 
         self.returnType = "json"
         self.numOfRows = "400"
@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     air_quality_scraper = AirQualityDataScraper()
 
-    city_list = ["경기"]
+    city_list = ["서울", "인천", "경기"]
 
     for city in city_list:
 

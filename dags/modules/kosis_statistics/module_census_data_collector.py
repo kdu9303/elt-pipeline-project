@@ -6,9 +6,9 @@ from typing import List, Dict
 import datetime
 from dateutil.rrule import rrule, MONTHLY
 from dateutil.relativedelta import relativedelta
+from airflow.models import Variable
 
-# from airflow.models import Variable
-from kosis_statistics_config import secret
+# from kosis_statistics_config import secret
 
 # 로그 기록용
 logger = logging.getLogger()
@@ -34,8 +34,8 @@ class CensusDataScraper:
 
     def __init__(self) -> None:
 
-        # self._API_KEY = Variable.get("KOSIS_API_SECRET")
-        self._API_KEY = secret.KOSIS_API_SECRET  # local
+        self._API_KEY = Variable.get("KOSIS_API_SECRET")
+        # self._API_KEY = secret.KOSIS_API_SECRET  # local
 
         self.method = "getList"
         self.orgId = "101"
