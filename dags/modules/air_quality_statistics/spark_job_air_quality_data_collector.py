@@ -73,11 +73,12 @@ hadoop_conf.set(
     "spark.delta.logStore.class",
     "org.apache.spark.sql.delta.storage.S3SingleDriverLogStore",
 )
+
 # -------------------------------------------------------------------
 # Data setting
 # -------------------------------------------------------------------
 
-table_name = "news_collection"
+table_name = "air_quality"
 
 # source path 설정
 S3_SOURCE_ACCESS_POINT_ALIAS = (
@@ -109,12 +110,32 @@ S3_DATA_DELTA_PATH = f"s3a://{S3_DELTA_ACCESS_POINT_ALIAS}/{table_name}/"
 # -------------------------------------------------------------------
 # Transfom Process
 # -------------------------------------------------------------------
-update_df = source_df.distinct()
+
+select_column_list = [
+    "sidoName",
+    "cityName",
+    "cityNameEng",
+    "districtCode",
+    "dataTime",
+    "coValue",
+    "no2Value",
+    "o3Value",
+    "pm10Value",
+    "pm25Value",
+    "so2Value",
+]
+update_df = source_df.select(select_column_list)
+
+update_df = update_df.distinct()
+
+float_column_list = ["coValue", "no2Value", "o3Value", "so2Value"]
+
+for columns in float_column_list:
+    update_df = update_df.withColumn(columns, F.col(columns).cast("float"))
 
 update_df = update_df.withColumn(
-    "keyword", F.regexp_extract(F.col("keyword"), "[가-힣a-zA-Z0-9]+", 0)
-).withColumn("publish_date", F.to_date(F.col("publish_date"), "yyyy.MM.dd"))
-
+    "dataTime", F.regexp_replace(F.col("dataTime"), "24:00", "00:00")
+).withColumn("dataTime", F.to_timestamp(F.col("dataTime"), "yyyy-MM-dd HH:mm"))
 
 # DeltaTable 인스턴스 생성
 try:
@@ -123,39 +144,23 @@ except AnalysisException:
     # Create DeltaTable instances
     update_df.write.mode("overwrite").format("delta").save(S3_DATA_DELTA_PATH)
 
+    delta_table = DeltaTable.forPath(spark, S3_DATA_DELTA_PATH)  # noqa: F405
+
 # -------------------------------------------------------------------
 # Perform Upsert
 # -------------------------------------------------------------------
-# Delta table에 update_df를 Update or Insert하는 과정
 delta_table.alias("old_data").merge(
     update_df.alias("new_data"),
-    "old_data.url = new_data.url AND old_data.keyword = new_data.keyword",
+    "old_data.sidoName = new_data.sidoName AND old_data.cityName = new_data.cityName AND old_data.dataTime = new_data.dataTime",
 ).whenMatchedUpdate(
     set={
-        "publish_date": "new_data.publish_date",
-        "publisher": "new_data.publisher",
-        "title": "new_data.title",
-        "description": "new_data.description",
+        "coValue": "new_data.coValue",
+        "no2Value": "new_data.no2Value",
+        "o3Value": "new_data.o3Value",
+        "pm10Value": "new_data.pm10Value",
+        "pm25Value": "new_data.pm25Value",
+        "so2Value": "new_data.so2Value",
     }
 ).whenNotMatchedInsertAll().execute()
-
-# remove possible duplicate rows
-delta_table.toDF().createOrReplaceTempView(table_name)
-
-duplicate_rows = (
-    (
-        spark.sql(
-            f"SELECT *, ROW_NUMBER() OVER (PARTITION BY url, keyword ORDER BY publish_date DESC) row_num FROM {table_name}"
-        )
-    )
-    .filter(F.col("row_num") > 1)
-    .drop("row_num")
-    .distinct()
-)
-
-delta_table.alias("main").merge(
-    duplicate_rows.alias("duplicate_rows"),
-    "main.url = duplicate_rows.url AND main.keyword = duplicate_rows.keyword",
-).whenMatchedDelete().execute()
 
 spark.stop()
