@@ -1,0 +1,10 @@
+{
+    "type": "record",
+    "namespace": "eltproject.air_qality",
+    "name": "airqality",
+    "fields" : [
+      {
+          "name" : "message_key", "type" : "string"
+      }
+    ]
+}

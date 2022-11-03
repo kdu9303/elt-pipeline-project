@@ -1,0 +1,77 @@
+{
+    "type": "record",
+    "namespace": "eltproject.air_qality",
+    "name": "airqality",
+    "fields": [
+
+        {
+            "name": "cityName", "type": ["null", "string"]
+        },
+        {
+            "name": "cityNameEng", "type": ["null", "string"]
+        },
+        {
+            "name": "coValue", "type": ["null", "string"]
+        },
+        {
+            "name": "dataGubun", "type": ["null", "string"]
+        },
+        {
+            "name": "dataTime", "type": "string"
+        },
+        {
+            "name": "districtCode", "type": ["null", "string"]
+        },
+        {
+            "name": "districtNumSeq", "type": ["null", "string"]
+        },
+        {
+            "name": "itemCode", "type": ["null", "string"]
+        },
+        {
+            "name": "khaiValue", "type": ["null", "string"]
+        },
+        {
+            "name": "no2Value", "type": ["null", "string"]
+        },
+        {
+            "name": "numOfRows", "type": ["null", "string"]
+        },
+        {
+            "name": "o3Value", "type": ["null", "string"]
+        },
+        {
+            "name": "pageNo", "type": ["null", "string"]
+        },
+        {
+            "name": "pm10Value", "type": ["null", "string"]
+        },
+        {
+            "name": "pm25Value", "type": ["null", "string"]
+        },
+        {
+            "name": "resultCode", "type": ["null", "string"]
+        },
+        {
+            "name": "resultMsg", "type": ["null", "string"]
+        },
+        {
+            "name": "returnType", "type": ["null", "string"]
+        },
+        {
+            "name": "searchCondition", "type": ["null", "string"]
+        },
+        {
+            "name": "serviceKey", "type": ["null", "string"]
+        },
+        {
+            "name": "sidoName", "type": "string"
+        },
+        {
+            "name": "so2Value", "type": ["null", "string"]
+        },
+        {
+            "name": "totalCount", "type": ["null", "string"]
+        }
+    ]
+}
