@@ -31,7 +31,7 @@ default_args = {
 def collect_census_data():
     """
     ### Dag Documentation
-    통계청api로 시군구 단위별 인구수 data를 받아서 s3에 저장합니다.
+    통계청api로 시군구 단위별 인구수 data를 받아서 s3에 저장한다.
     """
 
     @task

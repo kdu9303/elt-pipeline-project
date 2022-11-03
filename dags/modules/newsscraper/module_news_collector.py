@@ -13,6 +13,11 @@ logger = logging.getLogger()
 
 
 class NaverNewsScraper:
+    """
+    네이버 뉴스 검색 결과 중 검색어, 기사 제목, 요약, 링크,
+    발행 시간을 수집한다.
+    """
+
     def __init__(self, keyword: str) -> None:
         self.NAVER_BASE_URL = "https://search.naver.com/search.naver?"
         self.keyword = f'"{keyword}"'

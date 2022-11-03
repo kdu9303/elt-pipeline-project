@@ -134,3 +134,4 @@ dmypy.json
 
 # secret file
 kosis_statistics_config.py
+air_quality_statistics_config.py

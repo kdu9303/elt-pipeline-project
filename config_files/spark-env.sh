@@ -73,9 +73,12 @@
 # - OPENBLAS_NUM_THREADS=1   Disable multi-threading of OpenBLAS
 
 
-export SPARK_HOME=/home/centos/spark
-export SPARK_CONF_DIR=/home/centos/spark/conf
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
-export HADOOP_HOME=/usr/lib/hadoop
-export HADOOP_CONF_DIR=/usr/lib/hadoop/etc/hadoop
-export SPARK_MASTER_WEBUI_PORT=18080
+spark.master              yarn
+spark.eventLog.enabled    true
+spark.eventLog.dir                  hdfs://master:9000/spark-history
+spark.history.fs.logDirectory       hdfs://master:9000/spark-history
+spark.history.fs.cleaner.interval   7d
+spark.history.fs.cleaner.maxAge     14d
+spark.history.retainedApplications  10
+spark.yarn.historyServer.address master:18081
+spark.history.ui.port 				18081
