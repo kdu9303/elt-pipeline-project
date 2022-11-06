@@ -132,6 +132,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# vscode workspace setting
+.vscode
+
 # secret file
 kosis_statistics_config.py
 air_quality_statistics_config.py
