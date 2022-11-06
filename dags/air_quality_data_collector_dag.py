@@ -40,7 +40,6 @@ def scrape_air_quality_data():
     Task 순서:
         1. OPEN API에서 지역별 자료를 호출하여 Kafka producer로 넘긴다.
         2. S3 bucket에 해당일자 partition에 자료가 도착했는지 확인한다.
-
         3. Airflow Server에서 Spark driver server로 py file 스크립트를 전송한다.
         4. Spark remote server에 py파일이 도착했는지 확인한다.
         5. Livy rest api를 통해 spark job을 할당한다.
