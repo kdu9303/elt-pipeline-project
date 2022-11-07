@@ -30,7 +30,7 @@ Secret_access_key = awsKeys["aws_secret_access_key"]
 spark = (
     SparkSession.builder.master("yarn")
     .config("spark.submit.deployMode", "cluster")
-    .appName("News_Collector_Transfrom")
+    .appName("News_Collector_Transfrom")  # spark history에서 구분자 사용
     .config("spark.driver.memory", "2g")
     .config("spark.driver.cores", 1)
     .config("spark.executor.instances", 2)

@@ -30,7 +30,7 @@ Secret_access_key = awsKeys["aws_secret_access_key"]
 spark = (
     SparkSession.builder.master("yarn")
     .config("spark.submit.deployMode", "cluster")
-    .appName("News_Collector_Transfrom")
+    .appName("Air_Quality_Data_Transfrom")  # spark history에서 구분자 사용
     .config("spark.driver.memory", "2g")
     .config("spark.driver.cores", 1)
     .config("spark.executor.instances", 2)
@@ -162,5 +162,8 @@ delta_table.alias("old_data").merge(
         "so2Value": "new_data.so2Value",
     }
 ).whenNotMatchedInsertAll().execute()
+
+# SQL engine에서 Delta table을 인식하기 위해 manifest필요
+delta_table.generate("symlink_format_manifest")
 
 spark.stop()
