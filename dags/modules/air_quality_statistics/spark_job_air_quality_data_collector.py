@@ -164,6 +164,6 @@ delta_table.alias("old_data").merge(
 ).whenNotMatchedInsertAll().execute()
 
 # SQL engine에서 Delta table을 인식하기 위해 manifest필요
-delta_table.generate("symlink_format_manifest")
+delta_table.generate(f"{table_name}_manifest")
 
 spark.stop()
