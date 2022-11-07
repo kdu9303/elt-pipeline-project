@@ -80,7 +80,7 @@ def scrape_air_quality_data():
         bucket_key=f"s3://etl-project-bucket-20220817/air_quality/air_quality-s3-sink/{partition_folder_name}/*",
         wildcard_match=True,
         aws_conn_id="aws_connection",
-        timeout=600,
+        timeout=120,
         poke_interval=60,
     )
 
@@ -105,6 +105,7 @@ def scrape_air_quality_data():
         task_id="spark_script_file_checker",
         sftp_conn_id="spark_master_host_connection",
         path=remote_file_path,
+        timeout=120,
         poke_interval=10,
     )
 
