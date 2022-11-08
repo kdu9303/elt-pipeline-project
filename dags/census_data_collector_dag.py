@@ -30,7 +30,7 @@ default_args = {
 
 @dag(
     default_args=default_args,
-    schedule_interval=None,
+    schedule_interval="45 22 2-4 * *",
     catchup=False,
     start_date=pendulum.datetime(2022, 10, 1, tz="Asia/Seoul"),
     tags=["census_data_collection"],

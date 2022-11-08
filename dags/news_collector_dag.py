@@ -26,7 +26,7 @@ default_args = {
 
 @dag(
     default_args=default_args,
-    schedule_interval=None,
+    schedule_interval="50 22 * * *",
     catchup=False,
     start_date=pendulum.datetime(2021, 1, 1, tz="Asia/Seoul"),
     tags=["news_collection"],
