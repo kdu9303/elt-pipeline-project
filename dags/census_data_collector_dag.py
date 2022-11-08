@@ -2,7 +2,7 @@
 import logging
 import pendulum
 import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta  # noqa: F811
 from dateutil.relativedelta import relativedelta
 from airflow.decorators import dag, task
 from airflow.exceptions import AirflowException
