@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import pendulum
-from datetime import date
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from airflow.decorators import dag, task
 from airflow.exceptions import AirflowException
