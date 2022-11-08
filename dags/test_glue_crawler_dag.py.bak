@@ -1,0 +1,37 @@
+import pendulum
+from datetime import timedelta
+from airflow.decorators import dag
+from airflow.providers.amazon.aws.operators.glue_crawler import GlueCrawlerOperator
+
+
+default_args = {
+    "owner": "airflow",
+    "retries": 1,
+    "email": ["zheros9303@gmail.com"],
+    "retry_delay": timedelta(minutes=5),
+}
+
+
+@dag(
+    default_args=default_args,
+    schedule_interval=None,
+    start_date=pendulum.datetime(2022, 1, 1, tz="Asia/Seoul"),
+    tags=["glue crawler test dag"],
+    catchup=False,
+)
+
+def glue_crawler_operator_test():
+
+    crawler_config = {"Name": "delta-lake-crawler"}
+    run_crawler = GlueCrawlerOperator(
+        task_id="run_crawler",
+        aws_conn_id="aws_connection",
+        config=crawler_config,
+        wait_for_completion=True
+    )
+
+    # task flow
+    run_crawler
+
+
+dag = glue_crawler_operator_test()

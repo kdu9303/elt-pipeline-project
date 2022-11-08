@@ -8,6 +8,9 @@ from modules.producer import MessageProducer
 from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
 from airflow.providers.sftp.operators.sftp import SFTPOperator
 from airflow.providers.sftp.sensors.sftp import SFTPSensor
+from airflow.providers.amazon.aws.operators.glue_crawler import (
+    GlueCrawlerOperator,
+)
 from modules.spark_job_livy_custom_operator import SparkSubmitOperator
 from modules.air_quality_statistics.module_air_quality_collector import (
     AirQualityDataScraper,
@@ -43,6 +46,7 @@ def scrape_air_quality_data():
         3. Airflow Server에서 Spark driver server로 py file 스크립트를 전송한다.
         4. Spark remote server에 py파일이 도착했는지 확인한다.
         5. Livy rest api를 통해 spark job을 할당한다.
+        6. Glue Crawler를 작동 시킨다.
     """
 
     # Producer task
@@ -118,6 +122,14 @@ def scrape_air_quality_data():
         delete_session=False,
     )
 
+    crawler_config = {"Name": "delta-lake-crawler"}
+    run_crawler = GlueCrawlerOperator(
+        task_id="run_crawler",
+        aws_conn_id="aws_connection",
+        config=crawler_config,
+        wait_for_completion=True,
+    )
+
     # task flow
     (
         produce_data_to_broker()
@@ -125,6 +137,7 @@ def scrape_air_quality_data():
         >> transter_python_script  # noqa: W503
         >> spark_script_file_checker  # noqa: W503
         >> run_spark_batch_job  # noqa: W503
+        >> run_crawler  # noqa: W503
     )
 
 
