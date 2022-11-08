@@ -75,9 +75,10 @@ def scrape_news_data():
 
     # S3 Sensor
     partition_folder_name = datetime.now().strftime("%Y-%m-%d")
+    table_name = "news_collection"
     S3_data_upload_checker = S3KeySensor(
         task_id="S3_data_upload_checker",
-        bucket_key=f"s3://etl-project-bucket-20220817/news_collection/news_collection-s3-sink/{partition_folder_name}/*",
+        bucket_key=f"s3://etl-project-bucket-20220817/{table_name}/{table_name}-s3-sink/{partition_folder_name}/*",
         wildcard_match=True,
         aws_conn_id="aws_connection",
         timeout=120,

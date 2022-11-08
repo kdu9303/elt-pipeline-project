@@ -86,7 +86,7 @@ S3_SOURCE_ACCESS_POINT_ALIAS = (
 
 # 날짜 파티션 단위로 데이터를 불러올때(용량이 큰 경우)
 # SORUCE_PROCESS_DATE = datetime.now().strftime("%Y-%m-%d")
-# S3_DATA_SOURCE_PATH = f"s3a://{S3_SOURCE_ACCESS_POINT_ALIAS}/news_collection/news_collection-s3-sink/{SORUCE_PROCESS_DATE}/*"
+# S3_DATA_SOURCE_PATH = f"s3a://{S3_SOURCE_ACCESS_POINT_ALIAS}/{table_name}/{table_name}-s3-sink/{SORUCE_PROCESS_DATE}/*"
 
 S3_DATA_SOURCE_PATH = (
     f"s3a://{S3_SOURCE_ACCESS_POINT_ALIAS}/{table_name}/{table_name}-s3-sink/*"
@@ -159,6 +159,6 @@ delta_table.alias("main").merge(
 ).whenMatchedDelete().execute()
 
 # SQL engine에서 Delta table을 인식하기 위해 manifest필요
-delta_table.generate(f"{table_name}_manifest")
+delta_table.generate("symlink_format_manifest")
 
 spark.stop()
