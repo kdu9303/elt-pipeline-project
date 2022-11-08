@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 import pendulum
-import datetime
-from datetime import datetime, timedelta  # noqa: F811
+from datetime import date
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from airflow.decorators import dag, task
 from airflow.exceptions import AirflowException
@@ -65,7 +65,7 @@ def scrape_census_data():
         )
 
         # 날짜 범위 지정
-        current_month = datetime.date.today().replace(day=1)
+        current_month = date.today().replace(day=1)
         start_month = current_month + relativedelta(months=-3)
 
         census_api_collector = CensusDataScraper()
