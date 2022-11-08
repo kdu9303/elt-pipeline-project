@@ -34,6 +34,7 @@ spark = (
     .config("spark.driver.memory", "2g")
     .config("spark.driver.cores", 1)
     .config("spark.executor.instances", 2)
+    .config("spark.executor.memory", "2g")
     .config("spark.jars.packages", "io.delta:delta-core_2.12:2.0.0")
     .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
     .config(

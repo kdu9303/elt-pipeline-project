@@ -34,6 +34,7 @@ spark = (
     .config("spark.driver.memory", "2g")
     .config("spark.driver.cores", 1)
     .config("spark.executor.instances", 2)
+    .config("spark.executor.memory", "2g")
     .config("spark.jars.packages", "io.delta:delta-core_2.12:2.0.0")
     .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
     .config(
@@ -123,6 +124,8 @@ except AnalysisException:
     # Create DeltaTable instances
     update_df.write.mode("overwrite").format("delta").save(S3_DATA_DELTA_PATH)
 
+    delta_table = DeltaTable.forPath(spark, S3_DATA_DELTA_PATH)  # noqa: F405
+
 # -------------------------------------------------------------------
 # Perform Upsert
 # -------------------------------------------------------------------
@@ -138,25 +141,6 @@ delta_table.alias("old_data").merge(
         "description": "new_data.description",
     }
 ).whenNotMatchedInsertAll().execute()
-
-# remove possible duplicate rows
-delta_table.toDF().createOrReplaceTempView(table_name)
-
-duplicate_rows = (
-    (
-        spark.sql(
-            f"SELECT *, ROW_NUMBER() OVER (PARTITION BY url, keyword ORDER BY publish_date DESC) row_num FROM {table_name}"
-        )
-    )
-    .filter(F.col("row_num") > 1)
-    .drop("row_num")
-    .distinct()
-)
-
-delta_table.alias("main").merge(
-    duplicate_rows.alias("duplicate_rows"),
-    "main.url = duplicate_rows.url AND main.keyword = duplicate_rows.keyword",
-).whenMatchedDelete().execute()
 
 # SQL engine에서 Delta table을 인식하기 위해 manifest필요
 delta_table.generate("symlink_format_manifest")
