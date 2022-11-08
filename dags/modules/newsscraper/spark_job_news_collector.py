@@ -129,17 +129,29 @@ except AnalysisException:
 # -------------------------------------------------------------------
 # Perform Upsert
 # -------------------------------------------------------------------
+
+# remove possible duplicate rows in delta table
+delta_table.toDF().createOrReplaceTempView(table_name)
+duplicate_rows = (
+    (
+        spark.sql(
+            f"SELECT *, ROW_NUMBER() OVER (PARTITION BY url, keyword ORDER BY publish_date DESC) row_num FROM {table_name}"
+        )
+    )
+    .filter(F.col("row_num") > 1)
+    .drop("row_num")
+    .distinct()
+)
+
+delta_table.alias("main").merge(
+    duplicate_rows.alias("duplicate_rows"),
+    "main.url = duplicate_rows.url AND main.keyword = duplicate_rows.keyword",
+).whenMatchedDelete().execute()
+
 # Delta table에 update_df를 Update or Insert하는 과정
 delta_table.alias("old_data").merge(
     update_df.alias("new_data"),
     "old_data.url = new_data.url AND old_data.keyword = new_data.keyword",
-).whenMatchedUpdate(
-    set={
-        "publish_date": "new_data.publish_date",
-        "publisher": "new_data.publisher",
-        "title": "new_data.title",
-        "description": "new_data.description",
-    }
 ).whenNotMatchedInsertAll().execute()
 
 # SQL engine에서 Delta table을 인식하기 위해 manifest필요

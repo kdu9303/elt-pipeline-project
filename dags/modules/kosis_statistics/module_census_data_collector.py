@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     current_month = datetime.date.today().replace(day=1)
 
-    start_month = current_month + relativedelta(months=-2)
+    start_month = current_month + relativedelta(months=-3)
 
     population = CensusDataScraper()
 
