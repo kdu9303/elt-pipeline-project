@@ -1,32 +1,13 @@
-###################### Filebeat Configuration Example #########################
-
-# This file is an example configuration file highlighting only the most common
-# options. The filebeat.reference.yml file from the same directory contains all the
-# supported options with more comments. You can use it as a reference.
-#
-# You can find the full configuration reference here:
-# https://www.elastic.co/guide/en/beats/filebeat/index.html
-
-# For more available modules and options, please see the filebeat.reference.yml sample
-# configuration file.
-
 # ============================== Filebeat inputs ===============================
 
 filebeat.inputs:
 
-# Each - is an input. Most options can be set at the input level, so
-# you can use different inputs for various configurations.
-# Below are the input specific configurations.
-
 # filestream is an input for collecting log messages from files.
 - type: log
-
   # Unique ID among all inputs, an ID is required.
   id: master
-
   # Change to true to enable this input configuration.
   enabled: true
-
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
     - /home/ec2-user/spark/logs/*.log
@@ -36,45 +17,27 @@ filebeat.inputs:
   #       tokenizer: "%%{date} %{time} %{level} %{coponent}: %{message}"
   #       field: "message"
   #       target_prefix: "dissect"
+  encoding: utf-8
   multiline:
     pattern: '^([\d/]{6,8} [\d:]{6,8})'
     match: after
     negate: true
 
-  # Exclude lines. A list of regular expressions to match. It drops the lines that are
-  # matching any regular expression from the list.
-  #exclude_lines: ['^DBG']
-
-  # Include lines. A list of regular expressions to match. It exports the lines that are
-  # matching any regular expression from the list.
-  #include_lines: ['^ERR', '^WARN']
-
-  # Exclude files. A list of regular expressions to match. Filebeat drops the files that
-  # are matching any regular expression from the list. By default, no files are dropped.
-  #prospector.scanner.exclude_files: ['.gz$']
-
-  # Optional additional fields. These fields can be freely picked
-  # to add additional information to the crawled log files for filtering
-  #fields:
-  #  level: debug
-  #  review: 1
 
 # ============================== Filebeat modules ==============================
 
 filebeat.config.modules:
   # Glob pattern for configuration loading
   path: ${path.config}/modules.d/*.yml
-
   # Set to true to enable config reloading
-  reload.enabled: true
-
+  # reload.enabled: true
   # Period on which files under path should be checked for changes
-  reload.period: 30s
+  # reload.period: 30s
 
 # ======================= Elasticsearch template setting =======================
 
-setup.template.settings:
-  index.number_of_shards: 1
+# setup.template.settings:
+  #index.number_of_shards: 1
   #index.codec: best_compression
   #_source.enabled: false
 
@@ -98,7 +61,7 @@ setup.template.settings:
 # These settings control loading the sample dashboards to the Kibana index. Loading
 # the dashboards is disabled by default and can be enabled either by setting the
 # options here or by using the `setup` command.
-setup.dashboards.enabled: true
+# setup.dashboards.enabled: true
 
 # The URL from where to download the dashboards archive. By default this URL
 # has a value which is computed based on the Beat name and version. For released
@@ -110,13 +73,13 @@ setup.dashboards.enabled: true
 
 # Starting with Beats version 6.0.0, the dashboards are loaded via the Kibana API.
 # This requires a Kibana endpoint configuration.
-setup.kibana:
+# setup.kibana:
 
   # Kibana Host
   # Scheme and port can be left out and will be set to the default (http and 5601)
   # In case you specify and additional path, the scheme is required: http://localhost:5601/path
   # IPv6 addresses should always be defined as: https://[2001:db8::1]:5601
-  host: "localhost:5601"
+  # host: "localhost:5601"
 
   # Kibana Space ID
   # ID of the Kibana Space into which the dashboards should be loaded. By default,
@@ -140,19 +103,29 @@ setup.kibana:
 # output.console:
 #   pretty: true
 # Configure what output to use when sending the data collected by the beat.
+# ------------------------------- Kafka Output ---------------------------------
+output.kafka:
+  hosts: ["43.201.13.181:9092","43.200.251.62:9092","52.78.78.140:9092"]
+  topic: "spark-application-log-test"
+  required_acks: 1
+  partition.round_robin:
+    reachable_only: false
+  max_message_bytes: 1000000
 
+  codec.format:
+    string: '{"timestamp":%{[@timestamp]}, "agent_name":%{[agent.name]}, "message":%{[message]}}'
 # ---------------------------- Elasticsearch Output ----------------------------
-output.elasticsearch:
+# output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["localhost:9200"]
+  # hosts: ["localhost:9200"]
 
   # Protocol - either `http` (default) or `https`.
   #protocol: "https"
 
   # Authentication credentials - either API key or username/password.
   #api_key: "id:api_key"
-  username: "elastic"
-  password: "password"
+  # username: "elastic"
+  # password: "password"
 
 # ------------------------------ Logstash Output -------------------------------
 #output.logstash:
@@ -209,30 +182,3 @@ processors:
 # that it is pointing to your Elasticsearch monitoring cluster, you can simply
 # uncomment the following line.
 #monitoring.elasticsearch:
-
-# ============================== Instrumentation ===============================
-
-# Instrumentation support for the filebeat.
-#instrumentation:
-    # Set to true to enable instrumentation of filebeat.
-    #enabled: false
-
-    # Environment in which filebeat is running on (eg: staging, production, etc.)
-    #environment: ""
-
-    # APM Server hosts to report instrumentation results to.
-    #hosts:
-    #  - http://localhost:8200
-
-    # API Key for the APM Server(s).
-    # If api_key is set then secret_token will be ignored.
-    #api_key:
-
-    # Secret token for the APM Server(s).
-    #secret_token:
-
-
-# ================================= Migration ==================================
-
-# This allows to enable 6.7 migration aliases
-#migration.6_to_7.enabled: true
