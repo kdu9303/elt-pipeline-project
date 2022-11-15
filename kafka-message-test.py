@@ -4,13 +4,13 @@ from confluent_kafka import Consumer, KafkaError, KafkaException
 
 conf = {
     "bootstrap.servers": "43.201.13.181:9092, 43.200.251.62:9092, 52.78.78.140:9092",
-    "group.id": "connect-air_quality2",
+    "group.id": "from_console",
     "enable.auto.commit": True,
     "auto.offset.reset": "earliest",
 }
 
 consumer = Consumer(conf)
-topics = ["air_quality-s3-sink"]
+topics = ["spark-application-log"]
 running = True
 
 

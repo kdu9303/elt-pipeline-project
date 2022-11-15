@@ -100,28 +100,38 @@ S3_DELTA_ACCESS_POINT_ALIAS = (
 )
 S3_DATA_DELTA_PATH = f"s3a://{S3_DELTA_ACCESS_POINT_ALIAS}/{table_name}/"
 
-s3_CHECKPOINT_PATH = "/home/ec2-user/spark-data/stream_checkpoints"
+
+# checkpoint path 설정
+S3_CHECKPOINT_ACCESS_POINT_ALIAS = (
+    "etl-project-bucket-os3osysqodthpasbb5yqre5ot7jeaapn2a-s3alias"
+)
+
+S3_CHECKPOINT_PATH = (
+    f"s3a://{S3_CHECKPOINT_ACCESS_POINT_ALIAS}/spark_log_checkpoint/"
+)
 
 
 KAFKA_BOOTSTRAP_SERVERS = (
-    "43.201.13.181:9092,43.200.251.62:9092,52.78.78.140:9092"
+    "43.201.13.181:9092, 43.200.251.62:9092, 52.78.78.140:9092"
 )
 KAFKA_TOPIC = "spark-application-log"
-
 
 stream_df = (
     spark.readStream.format("kafka")
     .option("kafka.bootstrap.servers", KAFKA_BOOTSTRAP_SERVERS)
     .option("subscribe", KAFKA_TOPIC)
+    .option("checkpointLocation", S3_CHECKPOINT_PATH)
     .option("startingOffsets", "earliest")
+    .option("enable.auto.commit", "true")
+    .option("failOnDataLoss", "False")
     .load()
 )
 
 
-stream_df.selectExpr(
-    "timestamp", "CAST(key AS STRING)", "CAST(value AS STRING)"
-).writeStream.format("delta").outputMode("append").option(
-    "checkpointLocation", s3_CHECKPOINT_PATH
+stream_df.selectExpr("timestamp", "CAST(value AS STRING)").writeStream.format(
+    "delta"
+).trigger(once=True).outputMode("append").option(
+    "checkpointLocation", S3_CHECKPOINT_PATH
 ).start(
     S3_DATA_DELTA_PATH
 )
