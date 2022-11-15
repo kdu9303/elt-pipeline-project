@@ -5,12 +5,12 @@ filebeat.inputs:
 # filestream is an input for collecting log messages from files.
 - type: log
   # Unique ID among all inputs, an ID is required.
-  id: master
+  id: spark-master
   # Change to true to enable this input configuration.
   enabled: true
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /home/ec2-user/spark/logs/*.log
+    - /home/ec2-user/spark/logs/*.log*
     #- c:\programdata\elasticsearch\logs\*
   # processors:
   #   - dissect:
@@ -106,7 +106,7 @@ filebeat.config.modules:
 # ------------------------------- Kafka Output ---------------------------------
 output.kafka:
   hosts: ["43.201.13.181:9092","43.200.251.62:9092","52.78.78.140:9092"]
-  topic: "spark-application-log-test"
+  topic: "spark-application-log"
   required_acks: 1
   partition.round_robin:
     reachable_only: false
