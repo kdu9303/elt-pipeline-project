@@ -11,12 +11,7 @@ filebeat.inputs:
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
     - /home/ec2-user/spark/logs/*.log*
-    #- c:\programdata\elasticsearch\logs\*
-  # processors:
-  #   - dissect:
-  #       tokenizer: "%%{date} %{time} %{level} %{coponent}: %{message}"
-  #       field: "message"
-  #       target_prefix: "dissect"
+
   encoding: utf-8
   multiline:
     pattern: '^([\d/]{6,8} [\d:]{6,8})'
@@ -113,7 +108,8 @@ output.kafka:
   max_message_bytes: 1000000
 
   codec.format:
-    string: '{"timestamp":%{[@timestamp]}, "agent_name":%{[agent.name]}, "message":%{[message]}}'
+    string: '[%{[agent.name]}] %{[message]}'
+
 # ---------------------------- Elasticsearch Output ----------------------------
 # output.elasticsearch:
   # Array of hosts to connect to.
@@ -128,9 +124,9 @@ output.kafka:
   # password: "password"
 
 # ------------------------------ Logstash Output -------------------------------
-#output.logstash:
+# output.logstash:
   # The Logstash hosts
-  #hosts: ["localhost:5044"]
+  # hosts: ["172.31.56.170:5044"]
 
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
