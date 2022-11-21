@@ -27,7 +27,7 @@ default_args = {
 def spark_job_http_request_test():
     """
     ### Dag Documentation
-    Livy rest api를 통해 spark job을 할당해주는 dag입니다.
+    spark job test용 dag입니다.
     """
     # spark job script
     file_name = "spark_job_test.py"
