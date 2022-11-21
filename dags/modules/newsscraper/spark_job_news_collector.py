@@ -50,6 +50,18 @@ spark = (
         "org.apache.spark.sql.delta.catalog.DeltaCatalog",
     )
     .config("spark.databricks.delta.schema.autoMerge.enabled", "true")
+    .config(
+        "spark.databricks.delta.properties.defaults.autoOptimize.optimizeWrite",
+        "true",
+    )
+    .config(
+        "spark.databricks.delta.properties.defaults.autoOptimize.autoCompact",
+        "true",
+    )
+    .config(
+        "spark.databricks.delta.properties.defaults.compatibility.symlinkFormatManifest.enabled",
+        "true",
+    )
     .getOrCreate()
 )
 
@@ -132,11 +144,19 @@ update_df = update_df.withColumn(
 # DeltaTable 인스턴스 생성
 try:
     delta_table = DeltaTable.forPath(spark, S3_DATA_DELTA_PATH)  # noqa: F405
+
 except AnalysisException:
     # Create DeltaTable instances
-    update_df.write.mode("overwrite").format("delta").save(S3_DATA_DELTA_PATH)
-
+    (
+        update_df.write.mode("overwrite")
+        .format("delta")
+        .option("targetFileSize", "104857600")
+        .save(S3_DATA_DELTA_PATH)
+    )
     delta_table = DeltaTable.forPath(spark, S3_DATA_DELTA_PATH)  # noqa: F405
+
+    # SQL engine에서 Delta table을 인식하기 위해 manifest필요
+    delta_table.generate("symlink_format_manifest")
 
 # -------------------------------------------------------------------
 # Perform Upsert
@@ -165,8 +185,5 @@ delta_table.alias("old_data").merge(
     update_df.alias("new_data"),
     "old_data.url = new_data.url AND old_data.keyword = new_data.keyword",
 ).whenNotMatchedInsertAll().execute()
-
-# SQL engine에서 Delta table을 인식하기 위해 manifest필요
-delta_table.generate("symlink_format_manifest")
 
 spark.stop()
