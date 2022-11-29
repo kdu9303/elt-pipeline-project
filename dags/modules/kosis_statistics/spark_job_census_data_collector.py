@@ -170,7 +170,7 @@ try:
 except AnalysisException:
     # Create DeltaTable instances
     (
-        update_df.write.mode("overwrite")
+        joined_df.write.mode("overwrite")
         .format("delta")
         .option("targetFileSize", "104857600")
         .save(S3_DATA_DELTA_PATH)
@@ -184,17 +184,27 @@ except AnalysisException:
 # Perform Upsert
 # -------------------------------------------------------------------
 # Delta table에 update_df를 Update or Insert하는 과정
-delta_table.alias("old_data").merge(
-    joined_df.alias("new_data"),
-    "old_data.PRD_DE = new_data.PRD_DE AND old_data.C1 = new_data.C1",
-).whenMatchedUpdate(
-    set={
-        "C1_NM_SIDO": "new_data.C1_NM_SIDO",
-        "C1_NM": "new_data.C1_NM",
-        "C1_NM_ENG": "new_data.C1_NM_ENG",
-        "TBL_ID": "new_data.TBL_ID",
-        "DT": "new_data.DT",
-    }
-).whenNotMatchedInsertAll().execute()
+try:
+    delta_table.alias("old_data").merge(
+        joined_df.alias("new_data"),
+        "old_data.PRD_DE = new_data.PRD_DE AND old_data.C1 = new_data.C1",
+    ).whenMatchedUpdate(
+        set={
+            "C1_NM_SIDO": "new_data.C1_NM_SIDO",
+            "C1_NM": "new_data.C1_NM",
+            "C1_NM_ENG": "new_data.C1_NM_ENG",
+            "TBL_ID": "new_data.TBL_ID",
+            "DT": "new_data.DT",
+        }
+    ).whenNotMatchedInsertAll().execute()
+except AnalysisException:
+    # Create DeltaTable instances
+    (
+        joined_df.write.mode("overwrite")
+        .format("delta")
+        .option("overwriteSchema", "true")
+        .option("targetFileSize", "104857600")
+        .save(S3_DATA_DELTA_PATH)
+    )
 
 spark.stop()

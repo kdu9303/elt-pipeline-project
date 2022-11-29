@@ -181,18 +181,28 @@ except AnalysisException:
 # -------------------------------------------------------------------
 # Perform Upsert
 # -------------------------------------------------------------------
-delta_table.alias("old_data").merge(
-    update_df.alias("new_data"),
-    "old_data.sidoName = new_data.sidoName AND old_data.cityName = new_data.cityName AND old_data.dataTime = new_data.dataTime",
-).whenMatchedUpdate(
-    set={
-        "coValue": "new_data.coValue",
-        "no2Value": "new_data.no2Value",
-        "o3Value": "new_data.o3Value",
-        "pm10Value": "new_data.pm10Value",
-        "pm25Value": "new_data.pm25Value",
-        "so2Value": "new_data.so2Value",
-    }
-).whenNotMatchedInsertAll().execute()
+try:
+    delta_table.alias("old_data").merge(
+        update_df.alias("new_data"),
+        "old_data.sidoName = new_data.sidoName AND old_data.cityName = new_data.cityName AND old_data.dataTime = new_data.dataTime",
+    ).whenMatchedUpdate(
+        set={
+            "coValue": "new_data.coValue",
+            "no2Value": "new_data.no2Value",
+            "o3Value": "new_data.o3Value",
+            "pm10Value": "new_data.pm10Value",
+            "pm25Value": "new_data.pm25Value",
+            "so2Value": "new_data.so2Value",
+        }
+    ).whenNotMatchedInsertAll().execute()
+except AnalysisException:
+    # Create DeltaTable instances
+    (
+        update_df.write.mode("overwrite")
+        .format("delta")
+        .option("overwriteSchema", "true")
+        .option("targetFileSize", "104857600")
+        .save(S3_DATA_DELTA_PATH)
+    )
 
 spark.stop()

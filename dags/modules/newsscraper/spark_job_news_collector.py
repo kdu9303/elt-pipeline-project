@@ -174,16 +174,25 @@ duplicate_rows = (
     .drop("row_num")
     .distinct()
 )
+try:
+    delta_table.alias("main").merge(
+        duplicate_rows.alias("duplicate_rows"),
+        "main.url = duplicate_rows.url AND main.keyword = duplicate_rows.keyword",
+    ).whenMatchedDelete().execute()
 
-delta_table.alias("main").merge(
-    duplicate_rows.alias("duplicate_rows"),
-    "main.url = duplicate_rows.url AND main.keyword = duplicate_rows.keyword",
-).whenMatchedDelete().execute()
-
-# Delta table에 update_df를 Update or Insert하는 과정
-delta_table.alias("old_data").merge(
-    update_df.alias("new_data"),
-    "old_data.url = new_data.url AND old_data.keyword = new_data.keyword",
-).whenNotMatchedInsertAll().execute()
+    # Delta table에 update_df를 Update or Insert하는 과정
+    delta_table.alias("old_data").merge(
+        update_df.alias("new_data"),
+        "old_data.url = new_data.url AND old_data.keyword = new_data.keyword",
+    ).whenNotMatchedInsertAll().execute()
+except AnalysisException:
+    # Create DeltaTable instances
+    (
+        update_df.write.mode("overwrite")
+        .format("delta")
+        .option("overwriteSchema", "true")
+        .option("targetFileSize", "104857600")
+        .save(S3_DATA_DELTA_PATH)
+    )
 
 spark.stop()
