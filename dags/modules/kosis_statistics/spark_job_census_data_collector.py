@@ -172,6 +172,7 @@ except AnalysisException:
     (
         joined_df.write.mode("overwrite")
         .format("delta")
+        .option("mergeSchema", "true")
         .option("targetFileSize", "104857600")
         .save(S3_DATA_DELTA_PATH)
     )
