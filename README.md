@@ -5,10 +5,10 @@
 
 
 ## 1. 도입 목적
-- Scale in/out이 용이한 분산 시스템 환경 구축
+- Scale in/out이 용이한 분산 시스템 환경 구축성
 - Data loss 최소화
 - Architecture 확장시 단순한 구조 유지
-- Object Storage에서..이어서 작성
+- Object Storage에서의 데이터 정합성 유지
 
 ## 2. Architecture
 <p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/ELT-pipeline.jpg" width="740" height="400"/></p>
@@ -26,6 +26,11 @@
 - Data Application은 메세지 전송 역할로만 제한하여 Application 구조 단순화 및 Scheduler 서버 자원 사용 최소화
 - Kafka Connector로 S3, DB등 외부 시스템 연동 Pipeline 구성 단순화
 
-### 3-4.
+### 3-4. Object Storage에서의 데이터 정합성 유지
+- Storage Layer(Delta Lake)를 도입함으로써 저장소를 RDBMS와 같이 Update, Merge 작업 가능
 
 ## 4. Airflow 흐름도
+
+[Dag 구성](../dags/)
+
+---
