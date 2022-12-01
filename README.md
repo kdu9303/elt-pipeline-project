@@ -30,7 +30,8 @@
 - Storage Layer(Delta Lake)를 도입함으로써 저장소를 RDBMS와 같이 Update, Merge 작업 가능
 
 ## 4. Airflow 흐름도
+(diagram here...)
 
-[Dag 구성](../dags/)
+[Dag 구성](../blob/main/dags/README.md)
 
 ---
