@@ -34,4 +34,9 @@
 
 [DAG Task 구성](https://github.com/kdu9303/elt-pipeline-project/tree/main/dags)
 
+## 5. 인프라 구성
+
+docker file, docker-compose yml 설명
+링크 생성
+
 ---
