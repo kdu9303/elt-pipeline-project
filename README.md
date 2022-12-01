@@ -32,6 +32,6 @@
 ## 4. Airflow 흐름도
 (diagram here...)
 
-[Dag 구성](https://github.com/kdu9303/elt-pipeline-project/tree/main/dags)
+[DAG Task 구성](https://github.com/kdu9303/elt-pipeline-project/tree/main/dags)
 
 ---
