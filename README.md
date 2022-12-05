@@ -32,15 +32,15 @@
 ## 4. Pipeline 흐름도
 
 ### 4-1. Airflow
-Dag에서 불러오는 Source 파일은 dags/modules에서 공통 Module과 각 Dag 별 폴더에서 관리되고 있습니다.
-Git workflow를 통해 Dag의 import test와 code formatting을 거쳐 Airflow EC2 Instance로 Sync 됩니다.
+Dag에서 불러오는 Source 파일은 dags/modules에서 공통 Module과 Dag 주제별 폴더에서 관리되고 있습니다.
+Git workflow를 통해 Dag 파일의 import error test와 code formatting을 거쳐 Airflow EC2 Instance로 Sync 됩니다.
 
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/airflow-task-flow.jpg" width="740" height="100"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/airflow-task-flow.jpg" width="740" height="80"/></p>
 
 [Dag Task 구성 바로가기](https://github.com/kdu9303/elt-pipeline-project/tree/main/dags)
 
 ### 4-2. Logstash
-Spark cluster에 설치된 filebeat에서 실시간으로 Spark log를 Kafka Broker로 전송하고 Logstash를 통해 Bronze bucket으로 적재됩니다.
+Spark cluster에 설치된 Filebeat에서 실시간으로 Spark log를 Kafka Broker로 전송하고 Logstash를 통해 Bronze bucket으로 적재됩니다.
 
 ## 5. 인프라 구성
 
@@ -52,15 +52,15 @@ Spark cluster에 설치된 filebeat에서 실시간으로 Spark log를 Kafka Bro
 ## 6. 구현
 
 <details>
-<summary><strong>AWS 구성 예제</strong></summary>
+<summary><strong>AWS 구성 화면</strong></summary>
 <h4>EC2 Instance 구성</h4>
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/example_ec2_instance.jpg" width="740" height="300"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/example_ec2_instance.jpg" width="740" height="250"/></p>
 
 <h4>Delta lake 구조의 Silver bucket</h4>
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/example_s3_deltalake.jpg" width="740" height="250"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/example_s3_deltalake.jpg" width="740" height="200"/></p>
 
 <h4>Athena Query 결과</h4>
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/example_athena_result.jpg" width="740" height="260"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/example_athena_result.jpg" width="740" height="210"/></p>
 </details>
 
 ---
