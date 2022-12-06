@@ -11,7 +11,7 @@
 - Object Storage에서의 데이터 정합성 유지
 
 ## 2. Architecture
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/ELT-pipeline.jpg" width="740" height="400"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/ELT-pipeline.jpg" width="740" height="400"/></p>
 
 
 ## 3. 설명
@@ -35,7 +35,7 @@
 Dag에서 불러오는 Source 파일은 dags/modules에서 공통 Module과 Dag 주제별 폴더에서 관리되고 있습니다.
 Git workflow를 통해 Dag 파일의 import error test와 code formatting을 거쳐 Airflow EC2 Instance로 Sync 됩니다.
 
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/airflow-task-flow.jpg" width="740" height="80"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/airflow-task-flow.jpg" width="740" height="80"/></p>
 
 [Dag Task 구성 바로가기](https://github.com/kdu9303/elt-pipeline-project/tree/main/dags)
 
@@ -54,13 +54,13 @@ Spark cluster에 설치된 Filebeat에서 실시간으로 Spark log를 Kafka Bro
 <details>
 <summary><strong>AWS 구성 화면</strong></summary>
 <h4>EC2 Instance 구성</h4>
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/example_ec2_instance.jpg" width="740" height="250"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/example_ec2_instance.jpg" width="740" height="240"/></p>
 
 <h4>Delta lake 구조의 Silver bucket</h4>
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/example_s3_deltalake.jpg" width="740" height="200"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/example_s3_deltalake.jpg" width="740" height="170"/></p>
 
 <h4>Athena Query 결과</h4>
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/example_athena_result.jpg" width="740" height="210"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/example_athena_result.jpg" width="740" height="200"/></p>
 </details>
 
 ---

@@ -18,6 +18,23 @@ Dag 파일에서 실행 모듈과 Kafka Producer 모듈을 호출하여 실행�
 #### 공통 Module
 
 - producer.py
+    - Kafka Schema Registry에 사용되는 Avro Schema와의 호환성으로 AvroProcuder 사용
+
 - spark_job_livy_custom_operator.py
+    -
+
+
 
 ## 2. Dag 화면 예제
+
+<details>
+<summary><strong>화면 Example</strong></summary>
+<h4>Airflow Main 화면</h4>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/example_airflow1.jpg" width="740" height="200"/></p>
+
+
+<h4>Task flow</h4>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/example_airflow2.jpg" width="740" height="220"/></p>
+</details>
+
+---
