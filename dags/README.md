@@ -30,11 +30,11 @@ Dag 파일에서 실행 모듈과 Kafka Producer 모듈을 호출하여 실행�
 <details>
 <summary><strong>화면 Example</strong></summary>
 <h4>Airflow Main 화면</h4>
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/example_airflow1.jpg" width="740" height="200"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/example_airflow_1.jpg" width="740" height="200"/></p>
 
 
 <h4>Task flow</h4>
-<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/example_airflow2.jpg" width="740" height="220"/></p>
+<p align="center"><img src="https://github.com/kdu9303/elt-pipeline-project/blob/main/jpg/example_airflow_2.jpg" width="740" height="220"/></p>
 </details>
 
 ---
