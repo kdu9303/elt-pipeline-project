@@ -21,9 +21,11 @@ Dag 파일에서 실행 모듈과 Kafka Producer 모듈을 호출하여 실행�
     - Kafka Schema Registry에 사용되는 Avro Schema와의 호환성으로 AvroProcuder 사용
 
 - spark_job_livy_custom_operator.py
-    -
+    - Airflow 환경에 Spark 설치가 필요한 SparkSubmitOperator 대신 Spark Cluster 원격 실행이 가능한 Livy Operator 사용
 
-
+#### 주제별 Module
+    - 데이터를 호출하는 module 파일과 데이터 변환을 담당하는 Spark script 파일로 구성
+    - avro_schema 폴더에 정의된 데이터 Schema파일을 Dag에서 호출 
 
 ## 2. Dag 화면 예제
 
