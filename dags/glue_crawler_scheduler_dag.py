@@ -28,21 +28,30 @@ def trigger_glue_crawler():
     """
     ### Dag Documentation
     목적:
-        Glue Crawler 스케쥴러
+        Glue Crawler 스케쥴러 실행
 
     Task 순서:
-        1. Glue Crawler를 작동 시킨다.
+        Bronze Bucker의 Glue Crawler를 작동 시킨다.
+        Silver Bucker의 Glue Crawler를 작동 시킨다.
     """
-    crawler_config = {"Name": "delta-lake-crawler"}
-    run_crawler = GlueCrawlerOperator(
+    crawler_config = {"Name": "elt-project-data-crawler"}
+    run_crawler1 = GlueCrawlerOperator(
         task_id="run_crawler",
         aws_conn_id="aws_connection",
         config=crawler_config,
         wait_for_completion=True,
     )
 
+    crawler_config = {"Name": "delta-lake-crawler"}
+    run_crawler2 = GlueCrawlerOperator(
+        task_id="run_crawler",
+        aws_conn_id="aws_connection",
+        config=crawler_config,
+        wait_for_completion=True,
+    )
     # task flow
-    run_crawler  # noqa: W503
+    run_crawler1  # noqa: W503
+    run_crawler2  # noqa: W503
 
 
 dag = trigger_glue_crawler()

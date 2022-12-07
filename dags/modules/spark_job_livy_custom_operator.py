@@ -9,9 +9,17 @@ from airflow.providers.apache.livy.hooks.livy import BatchState, LivyHook
 
 class SparkSubmitOperator(BaseOperator):
     """
-    Livy rest api를 통해 pyspark script를 batch형식의
-    spark job을 driver에 전달한다.
-    Spark config parameter는 script안에서 정의한다.
+    Livy Rest Api를 통해 pyspark script를 batch형식의 Spark Job을 driver에 전달한다.
+    기존 LivyOperator에서 Customize 한 내용
+        - spark job 종료시 바로 batch 정보 삭제하는 함수 삭제 안하도록 수정
+        - 단시간 안에 Retry할때 배치 이름 중복되는 현상 방지하는 로직 추가
+        - Spark Config는 Spark Script안에서 정의하도록 Operator Parameter 제거
+
+    * Parameters *
+    file_name: Spark Cluster 내에 위치한 파일 위치
+    livy_conn_id: Airflow Spark Driver Node Connection
+    polling_interval: Livy Server에서 Spark Job의 Batch State 확인 시간
+    delete_session: Spark Job 종료후 세션 정보 삭제 여부
     """
 
     def __init__(
@@ -35,6 +43,7 @@ class SparkSubmitOperator(BaseOperator):
         return self._livy_hook
 
     def execute(self, context) -> Any:
+
         # 배치 이름이 겹치는 오류 방지
         post_fix = datetime.now().strftime("%Y%m%d-%H%M%S")
 

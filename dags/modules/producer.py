@@ -9,6 +9,15 @@ from confluent_kafka.avro import AvroProducer
 
 
 class MessageProducer:
+    """
+    Avro Scehma 등록과 Kafka Broker로 Dictonary 형태의 데이터 전송을 수행한다.
+
+    * Parameters *
+    topic: Kafka Topic
+    key_schema_path: 정의된 Avro Scehma 경로
+    value_schema_path: 정의된 Avro Scehma 경로
+    """
+
     def __init__(
         self, topic: str, key_schema_path: str, value_schema_path: str
     ) -> None:
@@ -21,7 +30,7 @@ class MessageProducer:
             "bootstrap.servers": "43.201.13.181:9092,43.200.251.62:9092,52.78.78.140:9092",
             "schema.registry.url": "http://43.200.243.204:8081/",
             "acks": "all",
-            "enable.idempotence": "True",
+            "enable.idempotence": "True",  # Kafka Broker로의 데이터 중복 전송 방지
         }
 
         self.producer = AvroProducer(
