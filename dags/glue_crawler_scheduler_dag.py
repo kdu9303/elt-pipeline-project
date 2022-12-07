@@ -34,19 +34,19 @@ def trigger_glue_crawler():
         Bronze Bucker의 Glue Crawler를 작동 시킨다.
         Silver Bucker의 Glue Crawler를 작동 시킨다.
     """
-    crawler_config = {"Name": "elt-project-data-crawler"}
+    crawler_config1 = {"Name": "elt-project-data-crawler"}
     run_crawler1 = GlueCrawlerOperator(
-        task_id="run_crawler",
+        task_id="run_crawler1",
         aws_conn_id="aws_connection",
-        config=crawler_config,
+        config=crawler_config1,
         wait_for_completion=True,
     )
 
-    crawler_config = {"Name": "delta-lake-crawler"}
+    crawler_config2 = {"Name": "delta-lake-crawler"}
     run_crawler2 = GlueCrawlerOperator(
-        task_id="run_crawler",
+        task_id="run_crawler2",
         aws_conn_id="aws_connection",
-        config=crawler_config,
+        config=crawler_config2,
         wait_for_completion=True,
     )
     # task flow
