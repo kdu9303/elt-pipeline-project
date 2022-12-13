@@ -57,6 +57,7 @@ class AirQualityDataScraper:
                     err_code = result["response"]["header"].get("resultCode")
                     raise requests.HTTPError(
                         f"error code:<{err_code}> 발생. OpenAPI 에러코드를 참조하세요."
+                        f" 코드 200의 경우 오픈API 서비스 일시 중지(공지 확인 필요)"
                     )
 
                 data = result["response"]["body"]["items"]
