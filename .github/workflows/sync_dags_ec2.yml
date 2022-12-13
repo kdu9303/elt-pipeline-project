@@ -6,6 +6,8 @@ on:
       - 'Test DAGs'
     types:
       - completed
+    branches:
+      - main
 
 jobs:
   deploy:
