@@ -31,19 +31,19 @@ class SparkClass:
         try:
 
             def get_aws_keys(profile: str) -> Dict[str, str]:
-                awsCreds = {}
-                Config = configparser.ConfigParser()
-                Config.read(
+                aws_creds = {}
+                conf = configparser.ConfigParser()
+                conf.read(
                     os.path.expanduser("/home/ec2-user/.aws/credentials")
                 )
-                if profile in Config.sections():
-                    awsCreds["aws_access_key_id"] = Config.get(
+                if profile in conf.sections():
+                    aws_creds["aws_access_key_id"] = conf.get(
                         profile, "aws_access_key_id"
                     )
-                    awsCreds["aws_secret_access_key"] = Config.get(
+                    aws_creds["aws_secret_access_key"] = conf.get(
                         profile, "aws_secret_access_key"
                     )
-                return awsCreds
+                return aws_creds
 
             def create_builder(app_name: str) -> SparkSession.Builder:
 
@@ -223,7 +223,7 @@ def transform_data(source_dataframe: DataFrame) -> DataFrame:
         "pm25Value",
         "so2Value",
     ]
-    update_df = source_df.select(select_column_list)
+    update_df = source_dataframe.select(select_column_list)
 
     update_df = update_df.distinct()
 
@@ -314,7 +314,9 @@ if __name__ == "__main__":
     # -------------------------------------------------------------------
     table_name = "air_quality"
 
-    sparkclass = SparkClass(app_name="Air_Quality_Ata_Transfrom")
+    sparkclass = SparkClass(
+        app_name="Air_Quality_Data_Transfrom"
+    )  # spark history에서 구분자 사용
     spark = sparkclass.start_spark(config)
 
     source_df = sparkclass.import_source_data(spark, table_name, "avro")
