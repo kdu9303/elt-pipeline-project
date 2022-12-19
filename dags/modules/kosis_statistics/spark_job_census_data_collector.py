@@ -50,7 +50,7 @@ class SparkClass:
                 builder = SparkSession.builder.appName(app_name).master("yarn")
                 return builder
 
-            def createSession(builder: SparkSession.Builder) -> SparkSession:
+            def create_session(builder: SparkSession.Builder) -> SparkSession:
                 return builder.getOrCreate()
 
             def set_session_config(
@@ -92,7 +92,7 @@ class SparkClass:
             Secret_access_key = awsKeys["aws_secret_access_key"]
 
             builder = create_builder(self.app_name)
-            spark = createSession(builder)
+            spark = create_session(builder)
             set_session_config(spark, spark_conf)
             set_hadoop_config(
                 spark, Access_key_ID, Secret_access_key, hadoop_conf
