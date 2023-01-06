@@ -148,6 +148,7 @@ class SparkClass:
             source_df = (
                 spark.read.format(format_type)
                 .option("mode", "PERMISSIVE")
+                .option("columnNameOfCorruptRecord", "_corrupt_record")
                 .load(datapath)
             )
             return source_df
